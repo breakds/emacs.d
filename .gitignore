@@ -1,3 +1,4 @@
+# Common Lisp
 *.FASL
 *.fasl
 *.lisp-temp
@@ -15,3 +16,17 @@
 *.sx32fsl
 *.wx64fsl
 *.wx32fsl
+
+# Emacs and Emacs Lisp
+auto-save-list/
+org-clock-save.el
+recentf
+savehist
+.lsp-session*
+bookmarks
+elpa
+session.*
+tutorial
+transient
+
+*~
