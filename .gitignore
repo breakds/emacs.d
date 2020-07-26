@@ -30,3 +30,7 @@ tutorial
 transient
 
 *~
+.cache
+.dap-breakpoints
+eclipse.jdt.ls
+workspace

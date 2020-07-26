@@ -36,6 +36,19 @@
 (add-hook 'c++-mode-hook 'clang-format-bindings)
 
 ;;; +============================================================+
+;;; | Java                                                       |
+;;; +------------------------------------------------------------+
+
+;; NOTE: the first when a .java file is opened, you will be prompted
+;; to install JDT Language Server (jdtls). Just type `jdtls` and it
+;; will go smoothly.
+(use-package lsp-java :ensure t
+  :config (progn
+            (add-hook 'java-mode-hook #'lsp)))
+
+;; TODO(breakds): Consider adding projectile if needed.
+
+;;; +============================================================+
 ;;; | LSP (Language Server Protocol) Support                     |
 ;;; +------------------------------------------------------------+
 ;;;
@@ -53,6 +66,10 @@
 
 (use-package flycheck :ensure t)
 
+(use-package which-key
+  :ensure t
+  :config (which-key-mode))
+
 (use-package company
   :ensure t
   :diminish company-mode
@@ -67,7 +84,8 @@
 (use-package lsp-mode
   :ensure t
   ;; Auto-enabled for c++ major mode
-  :hook (c++-mode . lsp)
+  :hook ((c++-mode . lsp)
+         (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :init (progn
           (setq lsp-auto-guess-root t)
@@ -75,6 +93,19 @@
           (setq lsp-auto-configure t))
   :config (progn
             (push 'company-lsp company-backends)))
+
+;; All credits to https://github.com/emacs-lsp/lsp-java
+(use-package dap-mode
+  :ensure t
+  :after lsp-mode
+  :config (dap-auto-configure-mode))
+(use-package dap-java :ensure nil)
+(use-package helm-lsp :ensure t)
+(use-package helm
+  :ensure t
+  :config (helm-mode))
+(use-package treemacs :ensure t)
+(use-package lsp-treemacs :ensure t)
 
 ;;; +============================================================+
 ;;; | Python                                                     |
