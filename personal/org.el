@@ -77,8 +77,8 @@
 ;;; + -----------------------------------------------------------+
 
 (setq org-agenda-files
-      (list "~/org/weride.org"
-            "~/org/personal.org"
+      (list "~/org/personal.org"
+            "~/org/amazon.org"
             "~/org/buffers.org"))
 
 (setq org-agenda-span 10)

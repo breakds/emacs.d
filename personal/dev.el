@@ -100,10 +100,10 @@
   :after lsp-mode
   :config (dap-auto-configure-mode))
 (use-package dap-java :ensure nil)
-(use-package helm-lsp :ensure t)
-(use-package helm
-  :ensure t
-  :config (helm-mode))
+;; (use-package helm-lsp :ensure t)
+;; (use-package helm
+;;   :ensure t
+;;   :config (helm-mode))
 (use-package treemacs :ensure t)
 (use-package lsp-treemacs :ensure t)
 

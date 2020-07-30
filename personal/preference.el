@@ -15,7 +15,12 @@
 ;;; Remove the trailing white spaces to tidy the code/article.
 (global-set-key (kbd "M-p") 'delete-trailing-whitespace)
 
-(setq browse-url-generic-program "google-chrome-stable")
+;;; Actively look for browsers in order, and use the one that hits
+;;; first.
+(setq browse-url-generic-program
+      (or (locate-file "google-chrome" exec-path)
+          (locate-file "google-chrome-stable" exec-path)
+          (locate-file "firefox" exec-path)))
 (setq browse-url-browser-function 'browse-url-generic)
 
 ;;; Insert time stamp
