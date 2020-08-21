@@ -34,3 +34,6 @@ transient
 .dap-breakpoints
 eclipse.jdt.ls
 workspace
+
+# straight.el
+straight
