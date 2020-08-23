@@ -1,0 +1,19 @@
+* Custom File
+  
+Put the custom file in a separate file so that it does not touch
+init.el. Only load it when it exists.
+
+#+BEGIN_SRC emacs-lisp
+(setq-default custom-file (expand-file-name ".custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))  
+#+END_SRC
+
+* Advisor System: el-patch
+
+Provides a way to customize the behavior of Emacs Lisp functions that
+do not provide enough variables and hooks to let you customize.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'el-patch)
+#+END_SRC

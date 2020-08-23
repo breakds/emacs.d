@@ -1,0 +1,18 @@
+* Theme
+
+Use solarized light as the theme for.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'color-theme-modern)
+(straight-use-package 'color-theme-sanityinc-solarized)
+(load-theme 'sanityinc-solarized-light t)
+#+END_SRC
+
+* Diminish
+
+Hide certain major/minor mode in the mode line. To configure
+[[https://github.com/emacsmirror/diminish][diminish.el]], click the link and check out the examples.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'diminish)
+#+END_SRC
