@@ -182,7 +182,8 @@ navigate/jump between them.
 
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'undo-tree)
-  (diminish 'undo-tree-mode) ; Do not show undo-tree at the status line.
+  (with-eval-after-load "undo-tree"
+    (diminish 'undo-tree-mode)) ; Do not show undo-tree at the status line.
   (global-undo-tree-mode)
   (setq undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t)
