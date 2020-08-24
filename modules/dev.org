@@ -24,6 +24,24 @@ Use magit for git.
   (global-set-key (kbd "C-x g") 'magit-status)
 #+END_SRC
 
+** ivy
+
+Install ivy from git (the [[https://github.com/abo-abo/swiper][git repo]] is called swiper).
+
+*TODO(breakds)*: When =ivy-mode= is enabled, I was no longer able to
+do =load-file= of the =init.el=. It will prompt error message like
+"wrong type argument: stringp, nil". Needs further investigation.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package '(counsel :type git
+                                  :host github
+                                  :repo "abo-abo/swiper"))
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t
+          ivy-count-format "(%d/%d) ")
+  (global-set-key (kbd "C-s") 'swiper-isearch)
+#+END_SRC
+
 * C/C++
 ** General C/C++ Specific Configuration
 Please treat .h as C++ code!
@@ -64,6 +82,13 @@ And respect C++11, C++14, C++17, C++20
    
 #+BEGIN_SRC emacs-lisp
   (add-hook 'python-mode-hook 'highlight-indent-guides-mode)
+#+END_SRC
+
+* Java
+** Android
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'android-mode)
 #+END_SRC
 
 * Bazel

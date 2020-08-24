@@ -8,6 +8,7 @@
 ;;;; 2. Eamcs as a C++ IDE (http://martinsosic.com/development/emacs/2017/12/09/emacs-cpp-ide.html)
 ;;;; 3. sing Emacs as a C++ IDE (https://nilsdeppe.com/posts/emacs-c++-ide2)
 ;;;; 4. Angrybacon's emacs configuration (https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org)
+;;;; 5. Lupan's emacs configuration (https://lupan.pl/dotemacs/)
 ;;;;
 ;;;; ---------- ELisp (Emacs Lisp) Notes ----------
 ;;;; 1. To get a REPL for Emacs Lisp, `M-x ielm`.
