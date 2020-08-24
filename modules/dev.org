@@ -3,12 +3,60 @@
 
 * Overall
 
-  Add visual guides towards indenting levels.
+Add visual guides towards indenting levels.
 
-  #+BEGIN_SRC emacs-lisp
-    (straight-use-package 'highlight-indent-guides)
-    (setq highlight-indent-guides-method 'character)
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'highlight-indent-guides)
+  (setq highlight-indent-guides-method 'character)
+#+END_SRC
+
+Useful packages.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'clang-format)
+  (global-set-key [C-M-tab] 'clang-format-buffer-and-back-to-indentation)
+#+END_SRC
+
+Use magit for git.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'magit)
+  (global-set-key (kbd "C-x g") 'magit-status)
+#+END_SRC
+
+* C/C++
+** General C/C++ Specific Configuration
+Please treat .h as C++ code!
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+#+END_SRC
+
+And respect C++11, C++14, C++17, C++20
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'modern-cpp-font-lock)
+  (modern-c++-font-lock-global-mode t)
+#+END_SRC
+
+** Clang Format
+
+#+BEGIN_SRC emacs-lisp
+  (defun clang-format-buffer-and-back-to-indentation ()
+    "Call clang-format to format the whole buffer, and move the
+    cursor to the first non-space character of the current line."
+      (interactive)
+      (clang-format-buffer)
+      (back-to-indentation))
+
+  (defun clang-format-bindings ()
+    "Hijack the tab key to perform the function defined above,
+    which is `clang-format-buffer-and-back-to-indentation`."
+    (define-key c++-mode-map [tab]
+      'clang-format-region))
+
+  (add-hook 'c++-mode-hook 'clang-format-bindings)
+#+END_SRC
+
 
 * Python
 
@@ -18,3 +66,67 @@
   (add-hook 'python-mode-hook 'highlight-indent-guides-mode)
 #+END_SRC
 
+* Bazel
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.BUILD" . python-mode))
+  (add-to-list 'auto-mode-alist '("\\.bzl" . python-mode))
+  (add-to-list 'auto-mode-alist '("BUILD" . python-mode))
+  (add-to-list 'auto-mode-alist '("WORKSPACE" . python-mode))
+#+END_SRC
+
+* Protocol Buffer
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'protobuf-mode)
+#+END_SRC
+
+* Rust
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'rust-mode)
+#+END_SRC
+
+* Common Lisp
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'slime)
+  ;; Use this instead of sbcl because in NixOS quicklisp wraps sbcl.
+  (setq inferior-lisp-program "quicklisp run")
+  (slime-setup '(slime-fancy))
+#+END_SRC
+
+* AucTeX
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'auctex)
+#+END_SRC
+
+* Javascript and Typescript
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.js$" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts$" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx$" . web-mode))
+#+END_SRC
+
+* Nix 
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'nix-mode)
+#+END_SRC
+
+* CMake
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'cmake-mode)
+#+END_SRC
+
+* Ledger
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'ledger-mode)
+  (add-to-list 'auto-mode-alist '("\\.journal$" . ledger-mode))
+#+END_SRC

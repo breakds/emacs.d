@@ -146,19 +146,19 @@ Refile to top-level is ALLOWED.
 
 Allow refile to create parent tasks with confirmation
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (setq org-refile-allow-creating-parent-nodes 'confirm)
 #+END_SRC
 
 
 * Habit
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (setq org-habit-show-habits-only-for-today nil)
 #+END_SRC
 
 * Archive
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (defun bds/org-archive-all-done ()
     (interactive)
     (org-map-entries 'org-archive-subtree "/DONE/DELEGATED/CANCELLED" 'file))
