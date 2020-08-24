@@ -1,5 +1,6 @@
 #+TITLE: Org Tweaks
 #+AUTHOR: Break Yang
+#+STARTUP: showall
 
 * Key Bindings
 
@@ -9,6 +10,7 @@
 | C-c o    | Main organizer file                               |
 | C-c c    | Capture                                           |
 | C-c '    | Create a new buffer to edit the source code block |
+| C-c C-j  | Goto mode                                         |
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c a") 'org-agenda)
@@ -18,6 +20,72 @@
   (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
 
+Paste hyperlinks from clipboard ([[https://pages.sachachua.com/.emacs.d/Sacha.html#orgfe5d909][original source]]).
+
+#+BEGIN_SRC emacs-lisp
+  (defun org/yank-link ()
+    (interactive)
+    (insert "[[")
+    (yank)
+    (insert "][here]]"))
+  (global-set-key (kbd "<f6>") 'org/yank-link)
+#+END_SRC
+
+* High-level Configuration
+
+Display children with indentation level. Note that the indentation is
+only *cosmetic*. 
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-startup-indented t)
+#+END_SRC
+
+When save, save all org files in every buffer.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-save-hook 'org-save-all-org-buffers)
+#+END_SRC
+
+When displaying agenda, find tasks from the following files.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-files
+        (list "~/org/personal.org"
+              "~/org/amazon.org"
+              "~/org/buffers.org"))
+
+  (setq org-agenda-span 10)
+  (setq org-agenda-start-on-weekday 0)
+#+END_SRC
+
+
+
+* Cutomized Label And Tags
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "ONGOING(g)" "PAUSE(p)" "|"
+                    "DONE(d)" "DELEGATED(l)" "CANCELLED(c@)")))
+  (setq org-todo-keyword-faces
+        '(("ONGOING" . (:foreground "blue" :weight bold))
+          ("PAUSE" . (:foreground "red" :weight bold))
+          ("DELEGATED" . (:foreground "orange" :weight bold))))
+  (setq org-tag-alist '((:startgroup . nil)
+                        ("@work" . ?w)
+                        ("@home" . ?h)
+                        (:endgroup . nil)
+                        ("FAVORITE" . ?f)))
+#+END_SRC
+
+
+* Markdown
+
+Github Flavored Markdown exporter for org mode
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'ox-gfm)
+#+END_SRC
+
 * Babel (Source code in org)
 
 To make TAB work inside the source code blocks when the language is
@@ -25,4 +93,73 @@ determined (or specified).
 
 #+BEGIN_SRC emacs-lisp
   (setq org-src-tab-acts-natively t)
+#+END_SRC
+
+
+* Org Capture
+
+org-captured item by default goes to =buffers.org=.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-default-notes-file "~/org/buffers.org")
+#+END_SRC
+
+org-capture templates for different sub types.
+
+#+BEGIN_SRC emacs-lisp
+  (defun bds/habit-default-schedule ()
+    (format-time-string "SCHEDULED: <%Y-%m-%d %a +7d>"))
+
+  (setq org-capture-templates
+        '(("t" "todo" entry (file+headline "~/org/buffers.org" "Tasks")
+           "* TODO %?\n")
+          ("f" "favorite" entry (file+headline "~/org/buffers.org" "Favorite")
+           "* %? :FAVORITE:\n%a\n")
+          ("h" "habit" entry (file+headline "~/org/buffers.org" "Tasks")
+           "* TODO %? :HABIT:\n%(bds/habit-default-schedule)\n:PROPERTIES:\n:STYLE: habit\n:END:\n")))
+#+END_SRC
+
+* Refile
+
+Targets include this file and any agenda file, up to 3 levels.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-refile-targets '((nil :maxlevel . 3)
+                             (org-agenda-files :maxlevel . 3)
+                             ("~/org/knowledge.org" :maxlevel . 2)))
+#+END_SRC
+
+However, targets with DONE state are EXCLUDED as refile targets.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-refile-target-verify-function
+        (lambda ()
+          (not (member (nth 2 (org-heading-components))
+                       org-done-keywords))))
+#+END_SRC
+
+
+Refile to top-level is ALLOWED.
+#+BEGIN_SRC emacs-lisp
+  (setq org-refile-use-outline-path 'file)
+#+END_SRC
+
+Allow refile to create parent tasks with confirmation
+
+#+BEGIN_SRC elisp
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+#+END_SRC
+
+
+* Habit
+
+#+BEGIN_SRC elisp
+  (setq org-habit-show-habits-only-for-today nil)
+#+END_SRC
+
+* Archive
+#+BEGIN_SRC elisp
+  (defun bds/org-archive-all-done ()
+    (interactive)
+    (org-map-entries 'org-archive-subtree "/DONE/DELEGATED/CANCELLED" 'file))
 #+END_SRC
