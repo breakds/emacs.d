@@ -1,3 +1,6 @@
+#+TITLE: Configure the Appearance of Emacs
+#+STARTUP: showall
+
 * Theme
 
 Use solarized light as the theme for.
@@ -8,11 +11,41 @@ Use solarized light as the theme for.
 (load-theme 'sanityinc-solarized-light t)
 #+END_SRC
 
-* Diminish
-
-Hide certain major/minor mode in the mode line. To configure
-[[https://github.com/emacsmirror/diminish][diminish.el]], click the link and check out the examples.
+Enable smart mode line.
 
 #+BEGIN_SRC emacs-lisp
-(straight-use-package 'diminish)
+  (straight-use-package 'smart-mode-line)
+  (setq sml/theme 'respectful)
+  (sml/setup)
 #+END_SRC
+
+* Graphical Window Specific such as X
+
+#+BEGIN_SRC emacs-lisp
+  (when window-system
+    (scroll-bar-mode 0)
+    (tool-bar-mode 0)
+    (tooltip-mode 0))
+#+END_SRC
+
+* Font
+
+#+BEGIN_SRC emacs-lisp
+  (set-frame-font "Fira Code-9")
+#+END_SRC
+
+* Time
+
+#+BEGIN_SRC emacs-lisp
+(setq display-time-24hr-format t)
+(display-time)
+#+END_SRC
+
+* Details
+
+Always highlight the current line.
+
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode t)
+#+END_SRC
+

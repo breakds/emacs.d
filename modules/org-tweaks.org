@@ -1,0 +1,28 @@
+#+TITLE: Org Tweaks
+#+AUTHOR: Break Yang
+
+* Key Bindings
+
+| Bindings | Description                                       |
+|----------+---------------------------------------------------|
+| C-c a    | Org Agenda                                        |
+| C-c o    | Main organizer file                               |
+| C-c c    | Capture                                           |
+| C-c '    | Create a new buffer to edit the source code block |
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c o") (lambda ()
+				  (interactive)
+				  (find-file "~/org/buffers.org")))
+  (global-set-key (kbd "C-c c") 'org-capture)
+#+END_SRC
+
+* Babel (Source code in org)
+
+To make TAB work inside the source code blocks when the language is
+determined (or specified).
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-tab-acts-natively t)
+#+END_SRC

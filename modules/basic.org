@@ -1,12 +1,52 @@
+#+TITLE: Basic Configurations for Emacs
+#+STARTUP: showall
+
+* Key Bindings
+
+| Bindings    | Description          |
+|-------------+----------------------|
+| C-x <Right> | Cycle to next window |
+| C-x <Left>  | Cycle to prev window |
+| C-x u       | Invoke Undo Tree     |
+| C-x <f2>    | Recent files         |
+
+The Emacs key bindings are documented [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Changing-Key-Bindings.html][here]]. Some especially useful
+quotes:
+
+#+BEGIN_QUOTE
+You can also use define-key, a more general function; then you must explicitly specify the map to change.
+
+The syntax =\C-= means that the following character is a control
+character and =\M-= means that the following character is a meta
+character. Thus, the string =\M-x= is read as containing a single
+=M-x=, =\C-f= is read as containing a single =C-f=, and =\M-\C-x= and
+=\C-\M-x= are both read as containing a single =C-M-x=.
+
+The =kbd= function is a convenient way to specify the key sequence.
+#+END_QUOTE
+
+And a keymap is basically a tree-structured map, with all the leaves
+being the functions to call. One could also use =global-set-key=,
+which is [[https://stackoverflow.com/questions/906368/what-is-the-difference-between-global-set-key-and-define-key-global-map-in-e#:~:text=2%20Answers&text=Function%20global%2Dset%2Dkey%20is,it%20only%20wraps%20define%2Dkey%20.][defined more or less like]] =(define-key (current-global-map) key command))=.
+
+* Diminish
+
+Hide certain major/minor mode in the mode line. To configure
+[[https://github.com/emacsmirror/diminish][diminish.el]], click the link and check out the examples.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'diminish)
+#+END_SRC
+
 * Custom File
   
 Put the custom file in a separate file so that it does not touch
 init.el. Only load it when it exists.
 
 #+BEGIN_SRC emacs-lisp
-(setq-default custom-file (expand-file-name ".custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))  
+  (setq-default custom-file (expand-file-name ".custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (load custom-file))  
 #+END_SRC
 
 * Advisor System: el-patch
@@ -15,5 +55,105 @@ Provides a way to customize the behavior of Emacs Lisp functions that
 do not provide enough variables and hooks to let you customize.
 
 #+BEGIN_SRC emacs-lisp
-(straight-use-package 'el-patch)
+  (straight-use-package 'el-patch)
+#+END_SRC
+
+* Unclassified General Configurations
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default 
+   indent-tabs-mode nil ; Do not use tab for indentation.
+   inhibit-startup-screen t ; Do not show startup splash.
+   scroll-conservatively most-positive-fixnum ; Auto-scroll 1 line every time.
+   scroll-margin 5 ; Auto scroll when you are within 5-lines of the vertical screen boundary.
+   sentence-end-double-space nil ; Use one space (instead of two) to mark end of sentence.
+   tab-width 8
+   x-stretch-cursor t)
+#+END_SRC
+
+Replace =yes/no= prompts with =y/n=.
+
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+Use uft-8 encoding by default.
+#+BEGIN_SRC emacs-lisp
+  (set-default-coding-systems 'utf-8)
+#+END_SRC
+
+A larger kill ring
+
+#+BEGIN_SRC emacs-lisp
+  (setq kill-ring-max 5000)
+#+END_SRC
+
+* Backup File Configuration
+
+Save a lot.
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" 
+                                                           user-emacs-directory)))
+        delete-old-versions -1
+        version-control t
+        vc-make-backup-files t
+        auto-save-file-name-transforms `((".*" ,(expand-file-name "auto-save-list/" 
+                                                                  user-emacs-directory) t)))
+#+END_SRC
+
+* Garbage Collection
+
+Run gc upon focus-out. Emacs should feel snappier.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'focus-out-hook #'garbage-collect)
+#+END_SRC
+
+* Handling Parentheses
+
+Highlights delimiters such as parentheses, brackets or braces according to their depth.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'rainbow-delimiters)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+#+END_SRC
+
+* Electric Buffer
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'electric-buffer-list)
+#+END_SRC
+
+* Scrolling
+
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-step 1) 
+  (defun scroll-up-slightly () (interactive) (scroll-up 3))
+  (defun scroll-down-slightly () (interactive) (scroll-down 3))
+  (global-set-key [mouse-4] 'scroll-down-slightly)
+  (global-set-key [mouse-5] 'scroll-up-slightly)
+#+END_SRC
+
+* Undo
+
+Use undo-tree-mode to visualize the undo/redo history, and to
+navigate/jump between them.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'undo-tree)
+  (diminish 'undo-tree-mode) ; Do not show undo-tree at the status line.
+  (global-undo-tree-mode)
+  (setq undo-tree-visualizer-timestamps t
+        undo-tree-visualizer-diff t)
+#+END_SRC
+
+* Recent Files
+
+#+BEGIN_SRC emacs-lisp
+  (require 'recentf)
+  (setq recent-max-saved-items 200
+        recent-max-menu-items 15)
+  (recentf-mode)
+  (global-set-key (kbd "C-x <f2>") 'recentf-open-files)
 #+END_SRC

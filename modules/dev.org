@@ -1,0 +1,20 @@
+#+TITLE: Development Configuration for Emacs
+#+STARTUP: showall
+
+* Overall
+
+  Add visual guides towards indenting levels.
+
+  #+BEGIN_SRC emacs-lisp
+    (straight-use-package 'highlight-indent-guides)
+    (setq highlight-indent-guides-method 'character)
+  #+END_SRC
+
+* Python
+
+** Visualize Indentation Level
+   
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'highlight-indent-guides-mode)
+#+END_SRC
+
