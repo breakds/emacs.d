@@ -38,7 +38,8 @@ do =load-file= of the =init.el=. It will prompt error message like
                                   :repo "abo-abo/swiper"))
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t
-          ivy-count-format "(%d/%d) ")
+        ivy-count-format "(%d/%d) "
+        ivy-height 17)
   (global-set-key (kbd "C-s") 'swiper-isearch)
 #+END_SRC
 
