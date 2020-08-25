@@ -41,6 +41,7 @@ do =load-file= of the =init.el=. It will prompt error message like
         ivy-count-format "(%d/%d) "
         ivy-height 17)
   (global-set-key (kbd "C-s") 'swiper-isearch)
+  (global-set-key (kbd "C-c g") 'counsel-ag)
 #+END_SRC
 
 * C/C++
