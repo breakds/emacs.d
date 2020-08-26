@@ -44,6 +44,31 @@ do =load-file= of the =init.el=. It will prompt error message like
   (global-set-key (kbd "C-c g") 'counsel-ag)
 #+END_SRC
 
+** Projectile
+
+Notes:
+1. This [[https://www.reddit.com/r/emacs/comments/azddce/what_workflows_do_you_have_with_projectile_and/][reddit post]] and [[https://www.reddit.com/r/emacs/comments/guzkwo/what_does_projectile_actually_do/][this]].
+2. It can help you go between implementations file and its
+   corresponding files, very suitable for java projects.
+3. Projectile help scoping some of commands from other packages, such
+   as lsp-mode and its siblings.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'projectile)
+  (straight-use-package 'counsel-projectile)
+  (projectile-mode +1)
+  (counsel-projectile-mode)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+#+END_SRC
+
+Some useful key bindings:
+| Key Binding | Description                         |
+|-------------+-------------------------------------|
+| C-c p s s   | counsel-projectile-ag               |
+| C-c p f     | counsel-projectile-find-file        |
+| C-c p d     | counsel-projectile-find-dir         |
+| C-c p b     | counsel-projectile-switch-to-buffer |
+
 * C/C++
 ** General C/C++ Specific Configuration
 Please treat .h as C++ code!
