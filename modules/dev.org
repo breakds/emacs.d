@@ -69,6 +69,18 @@ Some useful key bindings:
 | C-c p d     | counsel-projectile-find-dir         |
 | C-c p b     | counsel-projectile-switch-to-buffer |
 
+** Treemacs
+
+A file and project explorer similar to Project Explorer in Eclipse.
+Read the full [[https://github.com/Alexander-Miller/treemacs][readme]] on its GitHub site.
+
+Treemacs has integration with projectile.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'treemacs)
+  (straight-use-package 'treemacs-projectile)
+#+END_SRC
+
 * C/C++
 ** General C/C++ Specific Configuration
 Please treat .h as C++ code!
