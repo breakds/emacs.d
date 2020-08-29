@@ -8,7 +8,6 @@
 | C-x <Right> | Cycle to next window         |
 | C-x <Left>  | Cycle to prev window         |
 | C-x u       | Invoke Undo Tree             |
-| C-x <f2>    | Recent files                 |
 | M-p         | Remove trailing whitespaces. |
 
 The Emacs key bindings are documented [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Changing-Key-Bindings.html][here]]. Some especially useful
@@ -29,6 +28,47 @@ The =kbd= function is a convenient way to specify the key sequence.
 And a keymap is basically a tree-structured map, with all the leaves
 being the functions to call. One could also use =global-set-key=,
 which is [[https://stackoverflow.com/questions/906368/what-is-the-difference-between-global-set-key-and-define-key-global-map-in-e#:~:text=2%20Answers&text=Function%20global%2Dset%2Dkey%20is,it%20only%20wraps%20define%2Dkey%20.][defined more or less like]] =(define-key (current-global-map) key command))=.
+
+** Hydra
+
+With the above being said, it is better to use hydra to combine all
+the basic operations with "C-c b".
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'hydra)
+
+  (global-set-key (kbd "C-c b") 'hydra-base-map/body)
+#+END_SRC
+
+
+The basic map for most frequently used key bindings.
+
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-base-map (:color amaranth)
+    "
+    ^
+    ^Projectile^        ^Mode^         
+    ^──────────^────────^───────^──────
+    _q_ quit            _u_ undo tree
+    _r_ recent files    _t_ treemacs   
+    ^^                  ^^
+    ^^                  ^^             
+    ^^                  ^^             
+    "
+    ("q" nil)
+    ("r" recentf-open-files :exit t)
+    ("t" treemacs :exit t)
+    ("u" undo-tree-visualize :exit t))
+#+END_SRC
+
+Being able to zoom in and out is useful
+
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-zoom (global-map "<f2>")
+    "zoom"
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out"))
+#+END_SRC
 
 * Diminish
 
@@ -196,16 +236,6 @@ navigate/jump between them.
   (setq recent-max-saved-items 200
         recent-max-menu-items 15)
   (recentf-mode)
-  (global-set-key (kbd "C-x <f2>") 'recentf-open-files)
 #+END_SRC
 
-* Hydra
 
-#+BEGIN_SRC emacs-lisp
-  (straight-use-package 'hydra)
-
-  (defhydra hydra-zoom (global-map "<f2>")
-    "zoom"
-    ("g" text-scale-increase "in")
-    ("l" text-scale-decrease "out"))
-#+END_SRC
