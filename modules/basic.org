@@ -198,3 +198,14 @@ navigate/jump between them.
   (recentf-mode)
   (global-set-key (kbd "C-x <f2>") 'recentf-open-files)
 #+END_SRC
+
+* Hydra
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'hydra)
+
+  (defhydra hydra-zoom (global-map "<f2>")
+    "zoom"
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out"))
+#+END_SRC

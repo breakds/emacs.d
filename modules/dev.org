@@ -37,6 +37,7 @@ do =load-file= of the =init.el=. It will prompt error message like
                                   :host github
                                   :repo "abo-abo/swiper"))
   (ivy-mode 1)
+  (diminish 'ivy-mode)
   (setq ivy-use-virtual-buffers t
         ivy-count-format "(%d/%d) "
         ivy-height 17)
@@ -57,8 +58,38 @@ Notes:
   (straight-use-package 'projectile)
   (straight-use-package 'counsel-projectile)
   (projectile-mode +1)
+  (diminish 'projectile-mode "PROJ")
   (counsel-projectile-mode)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+#+END_SRC
+
+Hydra map for projectile. Use "C-c p" to invoke it. This is copied
+from rememberYou's configuration in [[https://www.reddit.com/r/emacs/comments/azddce/what_workflows_do_you_have_with_projectile_and/][this reddit post]].
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c p") 'hydra-projectile/body)
+  (defhydra hydra-projectile (:color blue)
+    "
+    ^
+    ^Projectile^        ^Buffers^           ^Find^              ^Search^
+    ^──────────^────────^───────^───────────^────^──────────────^──────^────────────
+    _q_ quit            _b_ list            _d_ directory       _r_ replace
+    _i_ reset cache     _k_ kill all        _D_ root            _R_ regexp replace
+    ^^                  _S_ save all        _f_ file            _s_ search
+    ^^                  ^^                  _p_ project         ^^
+    ^^                  ^^                  ^^                  ^^
+    "
+    ("q" nil)
+    ("b" counsel-projectile-switch-to-buffer)
+    ("d" counsel-projectile-find-dir)
+    ("D" projectile-dired)
+    ("f" counsel-projectile-find-file)
+    ("i" projectile-invalidate-cache :color red)
+    ("k" projectile-kill-buffers)
+    ("p" counsel-projectile-switch-project)
+    ("r" projectile-replace)
+    ("R" projectile-replace-regexp)
+    ("s" counsel-ag)
+    ("S" projectile-save-project-buffers))
 #+END_SRC
 
 Some useful key bindings:

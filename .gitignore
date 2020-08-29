@@ -37,3 +37,6 @@ workspace
 
 # straight.el
 straight
+
+# Projectile
+projectile-bookmarks.eld
