@@ -1,6 +1,16 @@
 #+TITLE: Configure the Appearance of Emacs
 #+STARTUP: showall
 
+* Icons
+
+Use [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] for all the icon integration with other packages.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'all-the-icons)
+  (unless (find-font (font-spec :name "all-the-icons"))
+    (all-the-icons-install-fonts t))
+#+END_SRC
+
 * Theme
 
 Use solarized light as the theme for.
@@ -11,12 +21,12 @@ Use solarized light as the theme for.
 (load-theme 'sanityinc-solarized-light t)
 #+END_SRC
 
-Enable smart mode line.
+Enable [[https://github.com/seagle0128/doom-modeline][doom-modeline]]. It is a nicely done minimalist's modeline. It
+requires the icon package [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] (see above section) to work.
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'smart-mode-line)
-  (setq sml/theme 'respectful)
-  (sml/setup)
+  (straight-use-package 'doom-modeline)
+  (doom-modeline-mode)
 #+END_SRC
 
 * Graphical Window Specific such as X
