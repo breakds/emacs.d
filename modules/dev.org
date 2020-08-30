@@ -42,7 +42,6 @@ do =load-file= of the =init.el=. It will prompt error message like
         ivy-count-format "(%d/%d) "
         ivy-height 17)
   (global-set-key (kbd "C-s") 'swiper-isearch)
-  (global-set-key (kbd "C-c g") 'counsel-ag)
 #+END_SRC
 
 ** Projectile
@@ -145,6 +144,15 @@ Hydra bindings for flycheck
     ("v" flycheck-verify-setup))
 #+END_SRC
 
+** Auto Completion: company-mode
+
+The package company mode uses *pluggable* backends and frontends for
+completion candidates.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'company)
+  (global-company-mode t)
+#+END_SRC
 * C/C++
 ** General C/C++ Specific Configuration
 Please treat .h as C++ code!

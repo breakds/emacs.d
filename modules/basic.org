@@ -46,18 +46,19 @@ The basic map for most frequently used key bindings.
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-base-map (:color amaranth)
     "
+    Break's Frequently Used Keys
     ^
-    ^Projectile^        ^Mode^         
+    ^Fast^              ^Mode^         
     ^──────────^────────^───────^──────
-    _q_ quit            _u_ undo tree
-    _r_ recent files    _t_ treemacs   
-    ^^                  ^^
-    ^^                  ^^             
-    ^^                  ^^             
+    _r_ recent files    _u_ undo tree
+    _g_ ag              _t_ treemacs   
+    ─────────────────────────────────────
+    ^[_q_]: quit
     "
     ("q" nil)
     ("r" recentf-open-files :exit t)
     ("t" treemacs :exit t)
+    ("g" counsel-ag :exit t)
     ("u" undo-tree-visualize :exit t))
 #+END_SRC
 
