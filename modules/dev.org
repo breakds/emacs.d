@@ -160,7 +160,10 @@ completion candidates.
   (global-company-mode t)
 #+END_SRC
 
-Also, add =company-box= to add icons to company frontends.
+Also, add =company-box= to add icons to company frontends. Note that
+the default icons are too big currently. Therefore it is recommended
+to use ='company-box-icons-idea= or ='company-box-icons-all-the-icons=
+instead.
 
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'company-box)
