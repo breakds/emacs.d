@@ -177,7 +177,26 @@ instead.
 
 * LSP (Language Server Protocol) to Rule Them All
 
-Use [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] as the client for various lsp servers.
+Use [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] as the client for various lsp servers. The following
+configuration is mostly guided by [[https://emacs-lsp.github.io/lsp-mode/page/installation/#vanilla-emacs][official installation instructions]].
+
+The =dap-mode= is used for integrated debugger experience.
+
+#+BEGIN_SRC emacs-lisp
+  (setq lsp-key-prefix "C-c l")
+  (straight-use-package 'lsp-mode)
+  (setq lsp-enable-snippet nil
+        lsp-prefer-flymake nil
+        lsp-restart 'auto-restart
+        lsp-completion-enable-additional-text-edit nil)
+  (straight-use-package 'lsp-ui)
+  (straight-use-package 'lsp-ivy)
+  (straight-use-package 'lsp-treemacs)
+  (straight-use-package 'dap-mode)
+  (dap-mode t)
+  (dap-ui-mode t)
+  (dap-ui-controls-mode t)  ;; requires Emacs 26+
+#+END_SRC
 
 
 * C/C++
@@ -223,10 +242,21 @@ And respect C++11, C++14, C++17, C++20
 #+END_SRC
 
 * Java
+** Standard Java
+
+Add hooks for =lsp-mode=. This means that the hoo
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'java-mode-hook 'lsp-deferred)
+  (straight-use-package 'lsp-java)  ;; LSP backend Java
+  (require 'dap-java)
+#+END_SRC
+
 ** Android
 
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'android-mode)
+  (add-hook 'android-mode-hook 'lsp-deferred)
 #+END_SRC
 
 * Bazel
