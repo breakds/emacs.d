@@ -92,14 +92,6 @@ from rememberYou's configuration in [[https://www.reddit.com/r/emacs/comments/az
     ("S" projectile-save-project-buffers))
 #+END_SRC
 
-Some useful key bindings:
-| Key Binding | Description                         |
-|-------------+-------------------------------------|
-| C-c p s s   | counsel-projectile-ag               |
-| C-c p f     | counsel-projectile-find-file        |
-| C-c p d     | counsel-projectile-find-dir         |
-| C-c p b     | counsel-projectile-switch-to-buffer |
-
 ** Treemacs
 
 A file and project explorer similar to Project Explorer in Eclipse.
@@ -110,6 +102,45 @@ Treemacs has integration with projectile.
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'treemacs)
   (straight-use-package 'treemacs-projectile)
+  (with-eval-after-load 'treemacs
+    (treemacs-git-mode 'deferred))
+#+END_SRC
+
+** Linter: flycheck
+To make extensions on top of flycheck, refer to [[https://www.flycheck.org/en/latest/developer/developing.html][Developer's Guide]]. You
+can define a checker for your language.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'flycheck)
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+#+END_SRC
+
+Hydra bindings for flycheck
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c f") 'hydra-flycheck/body)
+  (defhydra hydra-flycheck (:color blue)
+    "
+    ^
+    ^Flycheck^          ^Errors^            ^Checker^
+    ^────────^──────────^──────^────────────^───────^─────
+    _q_ quit            _<_ previous        _?_ describe
+    _M_ manual          _>_ next            _d_ disable
+    _v_ verify setup    _f_ check           _m_ mode
+    ^^                  _l_ list            _s_ select
+    ^^                  ^^                  ^^
+    "
+    ("q" nil)
+    ("<" flycheck-previous-error :color pink)
+    (">" flycheck-next-error :color pink)
+    ("?" flycheck-describe-checker)
+    ("M" flycheck-manual)
+    ("d" flycheck-disable-checker)
+    ("f" flycheck-buffer)
+    ("l" flycheck-list-errors)
+    ("m" flycheck-mode)
+    ("s" flycheck-select-checker)
+    ("v" flycheck-verify-setup))
 #+END_SRC
 
 * C/C++
