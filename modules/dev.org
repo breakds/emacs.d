@@ -259,6 +259,16 @@ Add hooks for =lsp-mode=. This means that the hoo
   (add-hook 'android-mode-hook 'lsp-deferred)
 #+END_SRC
 
+** Gradle
+
+*TODO*: Create a hydra map for gradle mode
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'gradle-mode)
+  (add-to-list 'auto-mode-alist '("\\.gradle\\'" . gradle-mode))
+  (add-to-list 'auto-mode-alist '("\\.java\\'" . gradle-mode))
+#+END_SRC
+
 * Bazel
 
 #+BEGIN_SRC emacs-lisp
