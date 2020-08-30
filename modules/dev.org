@@ -151,6 +151,12 @@ completion candidates.
 
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'company)
+  (with-eval-after-load 'company-mode
+    (company-begin-commands '(self-insert-command))
+    (company-idle-delay 0)
+    (company-minimum-prefix-length 2)
+    (company-show-numbers t)
+    (company-tooltip-align-annotations 't))
   (global-company-mode t)
 #+END_SRC
 
@@ -159,7 +165,16 @@ Also, add =company-box= to add icons to company frontends.
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'company-box)
   (add-hook 'company-mode-hook 'company-box-mode)
+  (setq company-box-icons-alist 'company-box-icons-idea)
+  (with-eval-after-load 'company-box-mode
+    (setq company-box-enable-icon centaur-icon
+          company-box-backends-colors nil
+          company-box-highlight-prefix t))
 #+END_SRC
+
+* LSP (Language Server Protocol) to Rule Them All
+
+Use [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] as the client for various lsp servers.
 
 
 * C/C++
