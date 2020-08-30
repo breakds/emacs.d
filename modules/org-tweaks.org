@@ -23,12 +23,19 @@
 Paste hyperlinks from clipboard ([[https://pages.sachachua.com/.emacs.d/Sacha.html#orgfe5d909][original source]]).
 
 #+BEGIN_SRC emacs-lisp
-  (defun org/yank-link ()
+  (defun bds/org/deduce-link-text (link)
+    ;; TODO(breakds): Implement the actual logic here
+    "here")
+  (defun bds/org/yank-link ()
     (interactive)
-    (insert "[[")
-    (yank)
-    (insert "][here]]"))
-  (global-set-key (kbd "<f6>") 'org/yank-link)
+    (let* ((link (current-kill 0))  ;; Get the front of the kill ring
+           (text (bds/org/deduce-link-text link)))
+      (insert "[[")
+      (yank)
+      (insert "][")
+      (insert text)
+      (insert "]]")))
+  (define-key org-mode-map (kbd "<f6>") 'bds/org/yank-link)
 #+END_SRC
 
 * High-level Configuration
