@@ -271,6 +271,8 @@ And respect C++11, C++14, C++17, C++20
 
 * Ledger
 
+*TODO*: Add a hydra map for ledger mode.
+
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'ledger-mode)
   (add-to-list 'auto-mode-alist '("\\.journal$" . ledger-mode))
