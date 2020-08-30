@@ -103,7 +103,9 @@ Treemacs has integration with projectile.
   (straight-use-package 'treemacs)
   (straight-use-package 'treemacs-projectile)
   (with-eval-after-load 'treemacs
-    (treemacs-git-mode 'deferred))
+    (treemacs-git-mode 'deferred)
+    ;; Do not show file that is git ignored.
+    (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?))
 #+END_SRC
 
 ** Linter: flycheck
