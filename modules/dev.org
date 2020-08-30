@@ -153,6 +153,15 @@ completion candidates.
   (straight-use-package 'company)
   (global-company-mode t)
 #+END_SRC
+
+Also, add =company-box= to add icons to company frontends.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'company-box)
+  (add-hook 'company-mode-hook 'company-box-mode)
+#+END_SRC
+
+
 * C/C++
 ** General C/C++ Specific Configuration
 Please treat .h as C++ code!
