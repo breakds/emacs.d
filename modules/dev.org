@@ -198,6 +198,19 @@ The =dap-mode= is used for integrated debugger experience.
   (dap-ui-controls-mode t)  ;; requires Emacs 26+
 #+END_SRC
 
+The compilation and test output are in some buffer derived from the
+=compilation mode=, which includes ansi color. Need to let them
+display the color properly.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (toggle-read-only)
+    (ansi-color-apply-on-region compilation-filter-start (point))
+    (toggle-read-only))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+#+END_SRC
+
 
 * C/C++
 ** General C/C++ Specific Configuration
