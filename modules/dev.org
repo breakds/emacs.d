@@ -281,6 +281,42 @@ Add hooks for =lsp-mode=. This means that the hoo
   (add-to-list 'auto-mode-alist '("\\.gradle$" . gradle-mode))
 #+END_SRC
 
+** Key Map for Java
+
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-java (:color blue)
+    "
+    ^
+    ^Browse^                    ^Testing^                     ^Edit^                    ^Server^
+    ^──────^────────────────────^───────^─────────────────────^────^────────────────────^──────^────────────
+    [_d_] Definition            [_x_] Run test method         [_f_] Format buffer       [_M-s_] Describe Session
+    [_R_] References            [_X_] Run test class          ^^                        ^^
+    [_i_] Implementation        ^^                            ^^                        ^^
+    [_t_] Type Definiton        ^^                            ^^                        ^^
+    ^^                          ^^                            ^^                        ^^
+    "
+    ("q" nil)
+
+    ("d" lsp-ui-peek-find-definitions)
+    ("R" lsp-ui-peek-find-references)
+    ("i" lsp-ui-peek-find-implementation)
+    ("t" lsp-find-type-definition)
+
+    ("x" dap-java-run-test-method)
+    ("X" dap-java-run-test-class)
+
+    ("f" lsp-format-buffer)
+
+    ("M-s" lsp-describe-session))
+  (define-key java-mode-map (kbd "C-c C-j") 'hydra-java/body)
+#+END_SRC
+
+Other *really* shortcuts defined below.
+
+#+BEGIN_SRC emacs-lisp
+  (define-key java-mode-map (kbd "C-.") 'lsp-ui-peek-find-implementation)
+#+END_SRC
+
 * Bazel
 
 #+BEGIN_SRC emacs-lisp
