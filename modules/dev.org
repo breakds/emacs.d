@@ -265,8 +265,7 @@ Add hooks for =lsp-mode=. This means that the hoo
 
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'gradle-mode)
-  (add-to-list 'auto-mode-alist '("\\.gradle\\'" . gradle-mode))
-  (add-to-list 'auto-mode-alist '("\\.java\\'" . gradle-mode))
+  (add-to-list 'auto-mode-alist '("\\.gradle$" . gradle-mode))
 #+END_SRC
 
 * Bazel
