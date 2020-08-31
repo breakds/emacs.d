@@ -290,10 +290,10 @@ Add hooks for =lsp-mode=. This means that the hoo
     ^Browse^                    ^Testing^                     ^Edit^                    ^Server^
     ^──────^────────────────────^───────^─────────────────────^────^────────────────────^──────^────────────
     [_d_] Definition            [_x_] Run test method         [_f_] Format buffer       [_M-s_] Describe Session
-    [_R_] References            [_X_] Run test class          ^^                        ^^
-    [_i_] Implementation        ^^                            ^^                        ^^
+    [_R_] References            [_X_] Run test class          [_F_] Organize imports    ^^
+    [_i_] Implementation        ^^                            [_S_] Add toString()      ^^
     [_t_] Type Definiton        ^^                            ^^                        ^^
-    ^^                          ^^                            ^^                        ^^
+    [_l_] Highlight Related     ^^                            ^^                        ^^
     "
     ("q" nil)
 
@@ -301,11 +301,14 @@ Add hooks for =lsp-mode=. This means that the hoo
     ("R" lsp-ui-peek-find-references)
     ("i" lsp-ui-peek-find-implementation)
     ("t" lsp-find-type-definition)
+    ("l" lsp-symbol-highlight)
 
     ("x" dap-java-run-test-method)
     ("X" dap-java-run-test-class)
 
     ("f" lsp-format-buffer)
+    ("F" lsp-java-organize-imports)
+    ("S" lsp-java-generate-to-string)
 
     ("M-s" lsp-describe-session))
   (define-key java-mode-map (kbd "C-c C-j") 'hydra-java/body)
