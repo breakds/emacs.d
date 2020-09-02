@@ -57,9 +57,10 @@ When displaying agenda, find tasks from the following files.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-files
-        (list "~/org/personal.org"
-              "~/org/amazon.org"
-              "~/org/buffers.org"))
+        (remove-if-not #'file-exists-p
+                       (list "~/org/personal.org"
+                             "~/org/buffers.org" 
+                             "~/projects/Snippets/amazon.org")))
   (setq org-agenda-span 10)
   (setq org-agenda-start-on-weekday 0)
 #+END_SRC
