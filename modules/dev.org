@@ -376,6 +376,7 @@ Other *really* shortcuts defined below.
 
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'cmake-mode)
+  (setq cmake-tab-width 4)
 #+END_SRC
 
 * Ledger
