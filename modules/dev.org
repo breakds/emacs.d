@@ -10,13 +10,6 @@ Add visual guides towards indenting levels.
   (setq highlight-indent-guides-method 'character)
 #+END_SRC
 
-Useful packages.
-
-#+BEGIN_SRC emacs-lisp
-  (straight-use-package 'clang-format)
-  (global-set-key [C-M-tab] 'clang-format-buffer-and-back-to-indentation)
-#+END_SRC
-
 Use magit for git.
 
 #+BEGIN_SRC emacs-lisp
@@ -229,6 +222,10 @@ And respect C++11, C++14, C++17, C++20
 ** Clang Format
 
 #+BEGIN_SRC emacs-lisp
+  (straight-use-package 'clang-format)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (defun clang-format-buffer-and-back-to-indentation ()
     "Call clang-format to format the whole buffer, and move the
     cursor to the first non-space character of the current line."
@@ -239,8 +236,8 @@ And respect C++11, C++14, C++17, C++20
   (defun clang-format-bindings ()
     "Hijack the tab key to perform the function defined above,
     which is `clang-format-buffer-and-back-to-indentation`."
-    (define-key c++-mode-map [tab]
-      'clang-format-region))
+    (define-key c++-mode-map [tab] 'clang-format-region)
+    (define-key c++-mode-map [C-M-tab] 'clang-format-buffer-and-back-to-indentation))
 
   (add-hook 'c++-mode-hook 'clang-format-bindings)
 #+END_SRC
