@@ -20,22 +20,28 @@
   (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
 
-Paste hyperlinks from clipboard ([[https://pages.sachachua.com/.emacs.d/Sacha.html#orgfe5d909][original source]]).
+Use [[https://github.com/rexim/org-cliplink][org-cliplink]] to conveniently yank hyperlinks from clipboard, which
+also supports automatic deduction of captions for the link.
 
 #+BEGIN_SRC emacs-lisp
-  (defun bds/org/deduce-link-text (link)
-    ;; TODO(breakds): Implement the actual logic here
-    "here")
-  (defun bds/org/yank-link ()
+  (straight-use-package 'org-cliplink)
+  (define-key org-mode-map (kbd "<f6>") 'org-cliplink)
+
+  (defun custom-org-cliplink ()
     (interactive)
-    (let* ((link (current-kill 0))  ;; Get the front of the kill ring
-           (text (bds/org/deduce-link-text link)))
-      (insert "[[")
-      (yank)
-      (insert "][")
-      (insert text)
-      (insert "]]")))
-  (define-key org-mode-map (kbd "<f6>") 'bds/org/yank-link)
+    (org-cliplink-insert-transformed-title
+     (org-cliplink-clipboard-content)     ;take the URL from the CLIPBOARD
+     (lambda (url title)
+       (let* ((parsed-url (url-generic-parse-url url)) ;parse the url
+              (clean-title
+               (cond
+                ;; if the host is github.com, cleanup the title
+                ((string= (url-host parsed-url) "github.com")
+                 (replace-regexp-in-string "GitHub - .*: \\(.*\\)" "\\1" title))
+                ;; otherwise keep the original title
+                (t title))))
+         ;; forward the title to the default org-cliplink transformer
+         (org-cliplink-org-mode-link-transformer url clean-title)))))
 #+END_SRC
 
 * High-level Configuration
@@ -63,6 +69,14 @@ When displaying agenda, find tasks from the following files.
                              "~/projects/Snippets/amazon.org")))
   (setq org-agenda-span 10)
   (setq org-agenda-start-on-weekday 0)
+#+END_SRC
+
+For visually better-looking org files in Emacs, we use [[https://github.com/integral-dw/org-bullets][org-bullets]].
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'org-bullets)
+  (add-hook 'org-mode-hook 
+            (lambda () (org-bullets-mode 1)))
 #+END_SRC
 
 
