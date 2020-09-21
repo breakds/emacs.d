@@ -269,6 +269,15 @@ Add hooks for =lsp-mode=. This means that the hoo
   (add-hook 'android-mode-hook 'lsp-deferred)
 #+END_SRC
 
+** Groovy
+
+Sometimes the =build.gradle= file is written in groovy, and that is
+one of the reasons why we need it.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'groovy-mode)
+#+END_SRC
+
 ** Gradle
 
 *TODO*: Create a hydra map for gradle mode
