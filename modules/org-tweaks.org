@@ -23,7 +23,11 @@
 Use [[https://github.com/rexim/org-cliplink][org-cliplink]] to conveniently yank hyperlinks from clipboard, which
 also supports automatic deduction of captions for the link.
 
-#+BEGIN_SRC emacs-lisp
+*TODO*: this is temporarily disabled as cliplink may take too long to
+analyze the url and get stuck. Use the old solution until this is
+fixed.
+
+#+BEGIN_SRC elisp
   (straight-use-package 'org-cliplink)
   (define-key org-mode-map (kbd "<f6>") 'org-cliplink)
 
@@ -42,6 +46,24 @@ also supports automatic deduction of captions for the link.
                 (t title))))
          ;; forward the title to the default org-cliplink transformer
          (org-cliplink-org-mode-link-transformer url clean-title)))))
+#+END_SRC
+
+Old solution:
+
+#+BEGIN_SRC emacs-lisp
+  (defun bds/org/deduce-link-text (link)
+      ;; TODO(breakds): Implement the actual logic here
+      "here")
+    (defun bds/org/yank-link ()
+      (interactive)
+      (let* ((link (current-kill 0))  ;; Get the front of the kill ring
+             (text (bds/org/deduce-link-text link)))
+        (insert "[[")
+        (yank)
+        (insert "][")
+        (insert text)
+        (insert "]]")))
+  (define-key org-mode-map (kbd "<f6>") 'bds/org/yank-link)
 #+END_SRC
 
 * High-level Configuration
