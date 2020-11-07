@@ -101,7 +101,11 @@ For visually better-looking org files in Emacs, we use [[https://github.com/inte
             (lambda () (org-bullets-mode 1)))
 #+END_SRC
 
+Enable =org-tempo= for easy-templates.
 
+#+BEGIN_SRC emacs-lisp
+  (require 'org-tempo)
+#+END_SRC
 
 * Cutomized Label And Tags
 
