@@ -26,7 +26,7 @@
 ;;; +------------------------------------------------------------+
 
 ;; Enable Common Lisp
-(require 'cl)
+(require 'cl-lib)
 
 ;; Bootstrap straight.el
 ;; ---------------------
