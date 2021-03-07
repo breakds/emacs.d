@@ -396,3 +396,10 @@ Other *really* shortcuts defined below.
   (straight-use-package 'ledger-mode)
   (add-to-list 'auto-mode-alist '("\\.journal$" . ledger-mode))
 #+END_SRC
+
+* Docker (Dockerfile)
+
+#+begin_src emacs-lisp
+  (straight-use-package 'dockerfile-mode)
+  (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+#+end_src
