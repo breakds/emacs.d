@@ -371,8 +371,13 @@ Other *really* shortcuts defined below.
   (add-to-list 'auto-mode-alist '("\\.ts$" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx$" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.svelte$" . web-mode))
-  (setq web-mode-engines-alist
-      '(("svelte" . "\\.svelte$")))
+  (setq web-mode-engines-alist '(("svelte" . "\\.svelte$")))
+  (add-hook 'web-mode-hook #'(lambda ()
+                               "Adjust the default indentation for web-mode"
+                               (setq web-mode-markup-indent-offset 2)
+                               (setq web-mode-css-indent-offset 2)
+                               (setq web-mode-code-indent-offset 2)))
+
 #+END_SRC
 
 * Nix 
