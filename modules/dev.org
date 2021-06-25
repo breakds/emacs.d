@@ -107,6 +107,7 @@ can define a checker for your language.
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'flycheck)
   (add-hook 'after-init-hook #'global-flycheck-mode)
+  (setq-default flycheck-highlighting-mode 'lines)
 #+END_SRC
 
 Hydra bindings for flycheck
@@ -167,6 +168,24 @@ instead.
           company-box-backends-colors nil
           company-box-highlight-prefix t))
 #+END_SRC
+
+** Direnv: automatically load environment
+
+#+begin_src
+  (straight-use-package '(inheritenv :type git
+                                     :host github
+                                     :repo "purcell/inheritenv"
+                                     :branch "main"))
+  (straight-use-package '(envrc :type git
+                                :host github
+                                :repo "purcell/envrc"))
+  (envrc-global-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+  (straight-use-package 'direnv)
+  (direnv-mode)
+#+end_src
 
 * LSP (Language Server Protocol) to Rule Them All
 
@@ -244,7 +263,6 @@ And respect C++11, C++14, C++17, C++20
 
 
 * Python
-
 ** Visualize Indentation Level
    
 #+BEGIN_SRC emacs-lisp
