@@ -6,9 +6,10 @@
 Use [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] for all the icon integration with other packages.
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'all-the-icons)
-  (unless (find-font (font-spec :name "all-the-icons"))
-    (all-the-icons-install-fonts t))
+  (use-package all-the-icons
+    :straight t
+    :config (unless (find-font (font-spec :name "all-the-icons"))
+	      (all-the-icons-install-fonts t)))
 #+END_SRC
 
 * Theme
@@ -16,32 +17,38 @@ Use [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] for all the
 Use solarized light as the theme for.
 
 #+BEGIN_SRC emacs-lisp
-(straight-use-package 'color-theme-modern)
-(straight-use-package 'color-theme-sanityinc-solarized)
-(load-theme 'sanityinc-solarized-light t)
+  (use-package solarized-theme
+    :straight t
+    :config (load-theme 'solarized-light t))
 #+END_SRC
 
 Enable [[https://github.com/seagle0128/doom-modeline][doom-modeline]]. It is a nicely done minimalist's modeline. It
 requires the icon package [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] (see above section) to work.
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'doom-modeline)
-  (doom-modeline-mode)
+  (use-package doom-modeline
+     :straight t
+     :init (doom-modeline-mode 1))
 #+END_SRC
 
 * Graphical Window Specific such as X
 
 #+BEGIN_SRC emacs-lisp
   (when window-system
-    (scroll-bar-mode 0)
-    (tool-bar-mode 0)
-    (tooltip-mode 0))
+    (scroll-bar-mode -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1))
 #+END_SRC
 
 * Font
 
+The =:height= property basically specifies the size of the font. It is
+an integer in units of =1/10= point.
+
 #+BEGIN_SRC emacs-lisp
-  (set-frame-font "Fira Code-9")
+  (set-face-attribute 'default nil
+		      :font "Fira Code"
+		      :height 100)
 #+END_SRC
 
 * Time
@@ -58,4 +65,3 @@ Always highlight the current line.
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode t)
 #+END_SRC
-
