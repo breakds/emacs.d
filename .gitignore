@@ -28,6 +28,7 @@ elpa
 session.*
 tutorial
 transient
+eshell/
 
 *~
 .cache
