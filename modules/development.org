@@ -105,6 +105,34 @@ Thanks to microsoft's great effrot invested in the language backend, we have [[h
     :init (setq lsp-keymap-prefix "C-c l"))
 #+end_src
 
+* C/C++
+
+Use the built-in =cc-mode=, together with =modern-cpp-font-lock= to support C++11, C++14, C++17 and C++20 syntax.
+
+It also add the key bindings and support for =clang-format=.
+
+#+begin_src emacs-lisp
+  (defun clang-format-buffer-and-back-to-indentation ()
+     "Call clang-format to format the whole buffer, and move the
+     cursor to the first non-space character of the current line."
+       (interactive)
+       (clang-format-buffer)
+       (back-to-indentation))
+
+  (use-package clang-format :straight t)
+
+  (use-package cc-mode
+    :mode ("\\.h\\'" . c++-mode) ;; Otherwise it will be c-mode
+    ;; Hijack the tab key to perform clang-format
+    :bind (:map c++-mode-map
+                ("<tab>" . clang-format-region)
+                ("<C-M-tab>" . clang-format-buffer-and-back-to-indentation)))
+
+  (use-package modern-cpp-font-lock
+    :straight t
+    :hook (c++-mode . modern-cpp-font-lock-mode))
+#+end_src
+
 * JavaScript, TypeScript, HTML and CSS
 
 Use =web-mode= for this with some customization.
@@ -126,7 +154,7 @@ Use =web-mode= for this with some customization.
           web-mode-css-indent-offset 2
           web-mode-code-indent-offset 2))
   ;; TODO: make lsp work
-  ;; :hook (web-mode . lsp-deferred)) 
+  ;; :hook (web-mode . lsp-deferred))
 #+end_src
 
 * Nix
