@@ -54,8 +54,8 @@ an integer in units of =1/10= point.
 * Time
 
 #+BEGIN_SRC emacs-lisp
-(setq display-time-24hr-format t)
-(display-time)
+  (setq display-time-24hr-format t)
+  (display-time)
 #+END_SRC
 
 * Details
