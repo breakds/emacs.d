@@ -81,3 +81,13 @@ Projectile has a very good [[https://docs.projectile.mx/][documentation]].
     :after projectile
     :config (counsel-projectile-mode))
 #+END_SRC
+
+** Direnv
+
+This makes Emacs respect =.envrc= file for direnv. I am mainly using =direnv= for automatically starting the =devShell= defined in =flake.nix=, and this makes it so that it brings in the commands enabled by the =devShell=.
+
+#+begin_src emacs-lisp
+  (use-package direnv
+    :straight t
+    :config (direnv-mode))
+#+end_src
