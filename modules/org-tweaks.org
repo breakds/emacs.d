@@ -2,7 +2,80 @@
 #+AUTHOR: Break Yang
 #+STARTUP: showall
 
-* Key Bindings
+* Overall and Appearance
+
+The preset is applied when entering org-mode buffer so that
+
+1. Display children with indentation level. Note that the indentation is only *cosmetic*.
+2. Automatically wraps the lines that goes over the boundaries.
+3. By default =visual-line-mode= will only wrap at the boundary of the screen, which might leave the line to be too line when the buffer and the screen is super wide. We use =visual-fill-column-mode= (provided by the [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]] package) to achieve that.
+
+#+begin_src emacs-lisp
+  (use-package visual-fill-column
+    :straight t)
+
+  (defun bds/org-mode-preset ()
+    (org-indent-mode 1)
+    (visual-line-mode 1)
+    (visual-fill-column-mode 1)
+    (setq visual-fill-column-width 90))
+
+  (use-package org
+    :hook (org-mode . bds/org-mode-preset)
+    :config
+    (setq org-ellipsis " ▾")
+    (setq org-log-into-drawer t))
+#+end_src
+
+** Easy Template Expansion
+
+Easy template expansion is about for example typing =<s= and have it exapanded to =#+begin_src= when TAB is hit. It is provided by =org-tempo=.
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'org
+    (require 'org-tempo)
+    ;; <sh -> #+begin_src shell
+    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+    ;; <el -> #+begin_src emacs-lisp
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    ;; <py -> #+begin_src python
+    (add-to-list 'org-structure-template-alist '("py" . "src python")))
+#+end_src
+
+** Bullets in Org Mode
+
+For visually better-looking org files in Emacs, we use [[https://github.com/integral-dw/org-bullets][org-bullets]]. We customized the bullets here just to make them look more consistent.
+
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :straight t
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+END_SRC
+
+** Cutomized Label And Tags
+
+Defines the TODO keywords andthe tag list.
+
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'org
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "ONGOING(g)" "PAUSE(p)" "|"
+                      "DONE(d)" "DELEGATED(l)" "CANCELLED(c@)")))
+    (setq org-todo-keyword-faces
+          '(("ONGOING" . (:foreground "blue" :weight bold))
+            ("PAUSE" . (:foreground "red" :weight bold))
+            ("DELEGATED" . (:foreground "orange" :weight bold))))
+    (setq org-tag-alist '((:startgroup . nil)
+                          ("@work" . ?w)
+                          ("@home" . ?h)
+                          (:endgroup . nil)
+                          ("FAVORITE" . ?f))))
+#+END_SRC
+
+** Key Bindings
 
 | Bindings | Description                                       |
 |----------+---------------------------------------------------|
@@ -11,75 +84,50 @@
 | C-c c    | Capture                                           |
 | C-c '    | Create a new buffer to edit the source code block |
 | C-c C-j  | Goto mode                                         |
+| <F6>     |                                                   |
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c o") (lambda ()
-				  (interactive)
-				  (find-file "~/org/buffers.org")))
+                                  (interactive)
+                                  (find-file "~/org/buffers.org")))
   (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
 
-Use [[https://github.com/rexim/org-cliplink][org-cliplink]] to conveniently yank hyperlinks from clipboard, which
-also supports automatic deduction of captions for the link.
-
-*TODO*: this is temporarily disabled as cliplink may take too long to
-analyze the url and get stuck. Use the old solution until this is
-fixed.
-
-#+BEGIN_SRC elisp
-  (straight-use-package 'org-cliplink)
-  (define-key org-mode-map (kbd "<f6>") 'org-cliplink)
-
-  (defun custom-org-cliplink ()
-    (interactive)
-    (org-cliplink-insert-transformed-title
-     (org-cliplink-clipboard-content)     ;take the URL from the CLIPBOARD
-     (lambda (url title)
-       (let* ((parsed-url (url-generic-parse-url url)) ;parse the url
-              (clean-title
-               (cond
-                ;; if the host is github.com, cleanup the title
-                ((string= (url-host parsed-url) "github.com")
-                 (replace-regexp-in-string "GitHub - .*: \\(.*\\)" "\\1" title))
-                ;; otherwise keep the original title
-                (t title))))
-         ;; forward the title to the default org-cliplink transformer
-         (org-cliplink-org-mode-link-transformer url clean-title)))))
-#+END_SRC
-
-Old solution:
+Use =<F6>= to paste a link in the kill ring (i.e. paste bin). By default it will just use ="here"= as the title for the link, unless we put more logic in =bds/org/deduce-link-text=.
 
 #+BEGIN_SRC emacs-lisp
   (defun bds/org/deduce-link-text (link)
       ;; TODO(breakds): Implement the actual logic here
       "here")
-    (defun bds/org/yank-link ()
-      (interactive)
-      (let* ((link (current-kill 0))  ;; Get the front of the kill ring
-             (text (bds/org/deduce-link-text link)))
-        (insert "[[")
-        (yank)
-        (insert "][")
-        (insert text)
-        (insert "]]")))
+  (defun bds/org/yank-link ()
+    (interactive)
+    (let* ((link (current-kill 0))  ;; Get the front of the kill ring
+           (text (bds/org/deduce-link-text link)))
+      (insert "[[")
+      (yank)
+      (insert "][")
+      (insert text)
+      (insert "]]")))
   (define-key org-mode-map (kbd "<f6>") 'bds/org/yank-link)
 #+END_SRC
 
-* High-level Configuration
+* Org Agenda
 
-Display children with indentation level. Note that the indentation is
-only *cosmetic*. 
+*TODO*: Make a better configuration for navigating and operating the agenda mode.
 
-#+BEGIN_SRC emacs-lisp
-  (setq org-startup-indented t)
-#+END_SRC
+#+begin_src emacs-lisp
+  (setq org-agenda-span 10)
+  (setq org-agenda-start-on-weekday 0)
+#+end_src
 
-When save, save all org files in every buffer.
+As long as org agenda buffer is open, save one org buffer will save all org buffers.
 
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'after-save-hook 'org-save-all-org-buffers)
-#+END_SRC
+#+begin_src emacs-lisp
+  (add-hook 'org-agenda-mode-hook
+            (lambda ()
+              (add-hook 'after-save-hook 'org-save-all-org-buffers)))
+#+end_src
 
 When displaying agenda, find tasks from the following files.
 
@@ -87,50 +135,17 @@ When displaying agenda, find tasks from the following files.
   (setq org-agenda-files
         (cl-remove-if-not #'file-exists-p
                           (list "~/org/personal.org"
-                                "~/org/buffers.org" 
-                                "~/projects/Snippets/amazon.org")))
-  (setq org-agenda-span 10)
-  (setq org-agenda-start-on-weekday 0)
+                                "~/org/buffers.org" )))
 #+END_SRC
-
-For visually better-looking org files in Emacs, we use [[https://github.com/integral-dw/org-bullets][org-bullets]].
-
-#+BEGIN_SRC emacs-lisp
-  (straight-use-package 'org-bullets)
-  (add-hook 'org-mode-hook 
-            (lambda () (org-bullets-mode 1)))
-#+END_SRC
-
-Enable =org-tempo= for easy-templates.
-
-#+BEGIN_SRC emacs-lisp
-  (require 'org-tempo)
-#+END_SRC
-
-* Cutomized Label And Tags
-
-#+BEGIN_SRC emacs-lisp
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "ONGOING(g)" "PAUSE(p)" "|"
-                    "DONE(d)" "DELEGATED(l)" "CANCELLED(c@)")))
-  (setq org-todo-keyword-faces
-        '(("ONGOING" . (:foreground "blue" :weight bold))
-          ("PAUSE" . (:foreground "red" :weight bold))
-          ("DELEGATED" . (:foreground "orange" :weight bold))))
-  (setq org-tag-alist '((:startgroup . nil)
-                        ("@work" . ?w)
-                        ("@home" . ?h)
-                        (:endgroup . nil)
-                        ("FAVORITE" . ?f)))
-#+END_SRC
-
 
 * Markdown
 
 Github Flavored Markdown exporter for org mode
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'ox-gfm)
+  (use-package ox-gfm
+    :straight t
+    :after org)
 #+END_SRC
 
 * Babel (Source code in org)
@@ -139,7 +154,8 @@ To make TAB work inside the source code blocks when the language is
 determined (or specified).
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-src-tab-acts-natively t)
+  (with-eval-after-load 'org
+    (setq org-src-tab-acts-natively t))
 #+END_SRC
 
 
@@ -148,22 +164,24 @@ determined (or specified).
 org-captured item by default goes to =buffers.org=.
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-default-notes-file "~/org/buffers.org")
+  (with-eval-after-load 'org
+    (setq org-default-notes-file "~/org/buffers.org"))
 #+END_SRC
 
-org-capture templates for different sub types.
+=org-capture= templates for different sub types.
 
 #+BEGIN_SRC emacs-lisp
   (defun bds/habit-default-schedule ()
     (format-time-string "SCHEDULED: <%Y-%m-%d %a +7d>"))
 
-  (setq org-capture-templates
-        '(("t" "todo" entry (file+headline "~/org/buffers.org" "Tasks")
-           "* TODO %?\n")
-          ("f" "favorite" entry (file+headline "~/org/buffers.org" "Favorite")
-           "* %? :FAVORITE:\n%a\n")
-          ("h" "habit" entry (file+headline "~/org/buffers.org" "Tasks")
-           "* TODO %? :HABIT:\n%(bds/habit-default-schedule)\n:PROPERTIES:\n:STYLE: habit\n:END:\n")))
+  (with-eval-after-load 'org
+    (setq org-capture-templates
+          '(("t" "todo" entry (file+headline "~/org/buffers.org" "Tasks")
+             "* TODO %?\n")
+            ("f" "favorite" entry (file+headline "~/org/buffers.org" "Favorite")
+             "* %? :FAVORITE:\n%a\n")
+            ("h" "habit" entry (file+headline "~/org/buffers.org" "Tasks")
+             "* TODO %? :HABIT:\n%(bds/habit-default-schedule)\n:PROPERTIES:\n:STYLE: habit\n:END:\n"))))
 #+END_SRC
 
 * Refile
@@ -171,40 +189,56 @@ org-capture templates for different sub types.
 Targets include this file and any agenda file, up to 3 levels.
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-refile-targets '((nil :maxlevel . 3)
-                             (org-agenda-files :maxlevel . 3)
-                             ("~/org/knowledge.org" :maxlevel . 2)))
+  (with-eval-after-load 'org
+    (setq org-refile-targets '((nil :maxlevel . 3)
+                               (org-agenda-files :maxlevel . 3)
+                               ("~/org/knowledge.org" :maxlevel . 2))))
 #+END_SRC
 
 However, targets with DONE state are EXCLUDED as refile targets.
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-refile-target-verify-function
-        (lambda ()
-          (not (member (nth 2 (org-heading-components))
-                       org-done-keywords))))
+  (with-eval-after-load 'org
+    (setq org-refile-target-verify-function
+          (lambda ()
+            (not (member (nth 2 (org-heading-components))
+                         org-done-keywords)))))
 #+END_SRC
-
 
 Refile to top-level is ALLOWED.
 #+BEGIN_SRC emacs-lisp
-  (setq org-refile-use-outline-path 'file)
+  (with-eval-after-load 'org
+    (setq org-refile-use-outline-path 'file))
 #+END_SRC
 
 Allow refile to create parent tasks with confirmation
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-refile-allow-creating-parent-nodes 'confirm)
+  (with-eval-after-load 'org
+    (setq org-refile-allow-creating-parent-nodes 'confirm))
 #+END_SRC
 
+Save org buffers after a refile.
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'org
+    (advice-add 'org-refile :after 'org-save-all-org-buffers))
+#+end_src
 
 * Habit
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-habit-show-habits-only-for-today nil)
+  (with-eval-after-load 'org
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-show-habits-only-for-today nil)
+    (setq org-habit-graph-column 60))
 #+END_SRC
 
 * Archive
+
+Provide a command (no key bindings) to archive all tasks that are
+already done.
+
 #+BEGIN_SRC emacs-lisp
   (defun bds/org-archive-all-done ()
     (interactive)
