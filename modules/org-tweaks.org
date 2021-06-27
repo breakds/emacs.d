@@ -18,7 +18,7 @@ The preset is applied when entering org-mode buffer so that
     (org-indent-mode 1)
     (visual-line-mode 1)
     (visual-fill-column-mode 1)
-    (setq visual-fill-column-width 90))
+    (setq visual-fill-column-width 100))
 
   (use-package org
     :hook (org-mode . bds/org-mode-preset)
