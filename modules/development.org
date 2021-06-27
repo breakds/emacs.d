@@ -91,3 +91,47 @@ This makes Emacs respect =.envrc= file for direnv. I am mainly using =direnv= fo
     :straight t
     :config (direnv-mode))
 #+end_src
+
+* Language Server Protocol (LSP)
+
+Thanks to microsoft's great effrot invested in the language backend, we have [[https://microsoft.github.io/language-server-protocol/][LSP]]. I think it is mainly designed for VSCode but many other IDEs have optted in for it. This section configures the integration with LSP for Emacs.
+
+** LSP Mode
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :straight t
+    :commands (lsp lsp-deferred)  ;; Triggered loading only by those commands
+    :init (setq lsp-keymap-prefix "C-c l"))
+#+end_src
+
+* JavaScript, TypeScript, HTML and CSS
+
+Use =web-mode= for this with some customization.
+
+1. By default =web-mode= does not associate typescript and javascript files. Add them to the =:mode= hook.
+2. By default =web-mode= globally use indentation =4=. Replace that with =2= to write more compact source code.
+3. Enable LSP with =lsp-deferred=. This is currently a *TODO*, because I haven't figure out how to install language server on a per-project basis (or maybe I should have install them globally or just inject to the emacs package).
+
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :straight t
+    :mode (("\\.ts\\'" . web-mode)
+           ("\\.tsx\\'" . web-mode)
+           ("\\.js\\'" . web-mode)
+           ("\\.jsx\\'" . web-mode)
+           ("\\.svelte\\'" . web-mode))
+    :config
+    (setq web-mode-markup-indent-offset 2
+          web-mode-css-indent-offset 2
+          web-mode-code-indent-offset 2))
+  ;; TODO: make lsp work
+  ;; :hook (web-mode . lsp-deferred)) 
+#+end_src
+
+* Nix
+
+#+begin_src emacs-lisp
+  (use-package nix-mode
+    :straight t)
+#+end_src
