@@ -1,0 +1,83 @@
+#+TITLE: Development Configuration for Emacs
+#+STARTUP: showall
+
+* Language Neutral Tooling and Utilities
+
+** Git
+
+Use magit for git. The customization on =magit-display-buffer-function= makes it prompts =magit-status= in the same windows instead of opening a new one.
+
+#+begin_src emacs-lisp
+  (use-package magit
+    ;; Defer loading magit until magit-status is called
+    :commands magit-status
+    :straight t
+    :bind (("C-x g" . magit-status))
+    :custom (magit-display-buffer-function
+             #'magit-display-buffer-same-window-except-diff-v1))
+#+end_src
+
+*** Forge
+
+This package [[https://magit.vc/manual/forge/][forge]] adds integration with Github and Gitlab etc.
+
+*NOTE*: Make sure to configure a GitHub token before using this package!
+
+1. https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
+2. https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+
+#+begin_src emacs-lisp
+  (use-package forge
+    :straight t
+    :after magit)
+#+end_src
+
+** Projectile
+
+This is for project management. It provides utilities to go between different files in the project, and also provides scoping for certain commands. This means that when you run those commands, if they are scopped by projectile, they are only gonna look at files from the project directory.
+
+This [[https://www.reddit.com/r/emacs/comments/azddce/what_workflows_do_you_have_with_projectile_and/][reddit post]] and [[https://www.reddit.com/r/emacs/comments/guzkwo/what_does_projectile_actually_do/][this]] are good readings.
+
+Projectile has a very good [[https://docs.projectile.mx/][documentation]].
+
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'hydra
+    (defhydra hydra-projectile (:color blue)
+      "
+      ^
+      ^Projectile^        ^Buffers^           ^Find^              ^Search^
+      ^──────────^────────^───────^───────────^────^──────────────^──────^────────────
+      _q_ quit            _b_ list            _d_ directory       _r_ replace
+      _i_ reset cache     _k_ kill all        _D_ root            _R_ regexp replace
+      ^^                  _S_ save all        _f_ file            _s_ search
+      ^^                  ^^                  _p_ project         ^^
+      ^^                  ^^                  ^^                  ^^
+      "
+      ("q" nil)
+      ("b" counsel-projectile-switch-to-buffer)
+      ("d" counsel-projectile-find-dir)
+      ("D" projectile-dired)
+      ("f" counsel-projectile-find-file)
+      ("i" projectile-invalidate-cache :color red)
+      ("k" projectile-kill-buffers)
+      ("p" counsel-projectile-switch-project)
+      ("r" projectile-replace)
+      ("R" projectile-replace-regexp)
+      ("s" counsel-ag)
+      ("S" projectile-save-project-buffers)))
+
+  (use-package projectile
+    :straight t
+    :diminish project-tile-mode
+    :config (projectile-mode)
+    :bind (("C-c p" . 'hydra-projectile/body))
+    :init
+    (when (file-directory-p "~/projects")
+      (setq projectile-project-search-path '("~/projects")))
+    (setq projectile-switch-project-action #'projectile-dired))
+
+  (use-package counsel-projectile
+    :straight t
+    :after projectile
+    :config (counsel-projectile-mode))
+#+END_SRC
