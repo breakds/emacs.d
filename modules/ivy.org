@@ -14,15 +14,15 @@ Install ivy from git (the [[https://github.com/abo-abo/swiper][git repo]] is cal
     :diminish ivy-mode
     :straight (counsel :type git :host github :repo "abo-abo/swiper")
     :init (setq ivy-use-virtual-buffers t
-		ivy-count-format "(%d/%d) "
-		ivy-height 17)
+                ivy-count-format "(%d/%d) "
+                ivy-height 17)
     :config (ivy-mode 1)
     :bind (("C-s" . swiper-isearch)
-	   ("M-x" . counsel-M-x)
-	   ("C-x C-f" . counsel-find-file)
-	   ("C-x b" . counsel-ibuffer)
-	   :map minibuffer-local-map
-	   ("C-r" . counsel-minibuffer-history)))
+           ("M-x" . counsel-M-x)
+           ("C-x C-f" . counsel-find-file)
+           ("C-x b" . counsel-ibuffer)
+           :map minibuffer-local-map
+           ("C-r" . counsel-minibuffer-history)))
 #+END_SRC
 
 * Ivy Rich
