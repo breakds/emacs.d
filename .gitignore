@@ -41,3 +41,6 @@ straight
 
 # Projectile
 projectile-bookmarks.eld
+
+# Forge and Magit
+forge-database.sqlite
