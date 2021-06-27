@@ -87,5 +87,5 @@
 (bds-load-config-module "modules" "ivy.org")
 (bds-load-config-module "modules" "basic.org")
 (bds-load-config-module "modules" "org-tweaks.org")
-;; (bds-load-config-module "modules" "dev.org")
+(bds-load-config-module "modules" "development.org")
 (garbage-collect)
