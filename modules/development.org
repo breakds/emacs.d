@@ -195,6 +195,23 @@ Use =web-mode= for this with some customization.
 
 * Python
 
+This configures the language server for python. Since for my setup the development environment is all in =flake.nix= so that both =python= and =python-language-server= will not be available until =direnv= kicks in. The current hack is to rely on [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Timers.html][timer]] to delay the initialization of =lsp-mode=, but maybe by applying the proper hook it does not have to be so.
+
+#+begin_src emacs-lisp
+  (defun bds/start-lsp-python-ms ()
+    (setq lsp-python-ms-executable (executable-find "python-language-server"))
+    (setq lsp-python-ms-python-executable (executable-find "python"))
+    (require 'lsp-python-ms)
+    (lsp))
+
+  (use-package lsp-python-ms
+    :straight t
+    :init
+    (setq lsp-python-ms-auto-install-server nil) ;; Let me manage it
+    :hook (python-mode . (lambda ()
+                           (run-at-time "2 sec" nil #'bds/start-lsp-python-ms))))
+#+end_src
+
 * Protocol Buffer
 
 #+begin_src emacs-lisp
@@ -234,7 +251,7 @@ correctly.
     :straight t
     :init (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
 #+end_src
-
+p
 * LaTeX
 
 #+BEGIN_SRC emacs-lisp
