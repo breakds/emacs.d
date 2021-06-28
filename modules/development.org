@@ -109,6 +109,8 @@ Thanks to microsoft's great effrot invested in the language backend, we have [[h
 
 Company is a text completion framework for Emacs. It does not have to work with LSP, but working with LSP can provide great experience.
 
+We also add the package =company-box= just to make the prompts a little bit more appealing. This only affects the appearance but not the logic and functionality.
+
 #+begin_src emacs-lisp
   (use-package company
     :straight t
@@ -117,8 +119,12 @@ Company is a text completion framework for Emacs. It does not have to work with 
     (:map company-active-map
           ("<tab>" . company-complete-selection))
     :custom
-    (company-minimum-prefix-length 1)
+    (company-minimum-prefix-length 2) ;; Need to type at leasat 2 characters
     (company-idle-delay 0.0))
+
+  (use-package company-box
+    :straight t
+    :hook (company-mode . company-box-mode))
 #+end_src
 
 * C/C++
