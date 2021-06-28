@@ -133,6 +133,14 @@ It also add the key bindings and support for =clang-format=.
     :hook (c++-mode . modern-cpp-font-lock-mode))
 #+end_src
 
+** CMake
+
+#+begin_src emacs-lisp
+  (use-package cmake-mode
+    :straight t
+    :config (setq cmake-tab-width 4))
+#+end_src
+
 * JavaScript, TypeScript, HTML and CSS
 
 Use =web-mode= for this with some customization.
@@ -160,6 +168,53 @@ Use =web-mode= for this with some customization.
 * Nix
 
 #+begin_src emacs-lisp
-  (use-package nix-mode
-    :straight t)
+  (use-package nix-mode :straight t)
 #+end_src
+
+* Python
+
+* Protocol Buffer
+
+#+begin_src emacs-lisp
+  (use-package protobuf-mode :straight t)
+#+end_src
+
+* Rust
+#+begin_src emacs-lisp
+  (use-package rust-mode :straight t)
+#+end_src
+
+* Common Lisp
+
+#+begin_src emacs-lisp
+  (use-package slime
+    :straight t
+    :config
+    (setq inferior-lisp-program "quicklisp run")
+    (slime-setup '(slime-fancy)))
+#+end_src
+
+* Ledger
+
+*TODO*: Add a hydra map for ledger mode.
+
+#+begin_src emacs-lisp
+  (use-package ledger-mode :straight t)
+#+end_src
+
+* Docker
+
+The =dockerfile-mode= makes emacs recognize =Dockerfile= syntax
+correctly.
+
+#+begin_src emacs-lisp
+  (use-package dockerfile-mode
+    :straight t
+    :init (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
+#+end_src
+
+* LaTeX
+
+#+BEGIN_SRC emacs-lisp
+  (use-package tex :straight auctex)
+#+END_SRC
