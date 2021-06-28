@@ -105,6 +105,22 @@ Thanks to microsoft's great effrot invested in the language backend, we have [[h
     :init (setq lsp-keymap-prefix "C-c l"))
 #+end_src
 
+** Company Mode
+
+Company is a text completion framework for Emacs. It does not have to work with LSP, but working with LSP can provide great experience.
+
+#+begin_src emacs-lisp
+  (use-package company
+    :straight t
+    :hook (prog-mode . company-mode)
+    :bind
+    (:map company-active-map
+          ("<tab>" . company-complete-selection))
+    :custom
+    (company-minimum-prefix-length 1)
+    (company-idle-delay 0.0))
+#+end_src
+
 * C/C++
 
 Use the built-in =cc-mode=, together with =modern-cpp-font-lock= to support C++11, C++14, C++17 and C++20 syntax.
