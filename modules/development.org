@@ -157,10 +157,10 @@ Use =web-mode= for this with some customization.
            ("\\.js\\'" . web-mode)
            ("\\.jsx\\'" . web-mode)
            ("\\.svelte\\'" . web-mode))
-    :config
-    (setq web-mode-markup-indent-offset 2
-          web-mode-css-indent-offset 2
-          web-mode-code-indent-offset 2))
+    :custom
+    (web-mode-markup-indent-offset 2 "Indent = 2 for html")
+    (web-mode-css-indent-offset 2 "Indent = 2 for CSS")
+    (web-mode-code-indent-offset 2 "Indent = 2 for JS/TS"))
   ;; TODO: make lsp work
   ;; :hook (web-mode . lsp-deferred))
 #+end_src
