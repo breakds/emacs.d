@@ -272,9 +272,17 @@ correctly.
     :straight t
     :init (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
 #+end_src
-p
+
 * LaTeX
 
 #+BEGIN_SRC emacs-lisp
   (use-package tex :straight auctex)
 #+END_SRC
+
+* Graphviz (DOT)
+
+#+begin_src emacs-lisp 
+  (use-package graphviz-dot-mode
+    :straight t
+    :custom (graphviz-dot-indent-width 4))
+#+end_src
