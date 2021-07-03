@@ -86,7 +86,7 @@ Defines the TODO keywords andthe tag list.
 | C-c c    | Capture                                           |
 | C-c '    | Create a new buffer to edit the source code block |
 | C-c C-j  | Goto mode                                         |
-| <F6>     |                                                   |
+| <F6>     | Yank the URL in the clipboard                     |
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c a") 'org-agenda)
@@ -137,57 +137,19 @@ When displaying agenda, find tasks from the following files.
   (setq org-agenda-files
         (cl-remove-if-not #'file-exists-p
                           (list "~/org/personal.org"
-                                "~/org/buffers.org" )))
+                                "~/org/buffers.org"
+                                "~/org/work/gail.org"
+                                "~/org/work/wonderland.org")))
 #+END_SRC
 
-* Markdown
+[[id:a201358c-1eab-4a33-8b2b-ac27b26d1bcb][Refile]]When you log something as DONE, lot the time.
 
-Github Flavored Markdown exporter for org mode
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ox-gfm
-    :straight t
-    :after org)
-#+END_SRC
-
-* Babel (Source code in org)
-
-To make TAB work inside the source code blocks when the language is
-determined (or specified).
-
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (with-eval-after-load 'org
-    (setq org-src-tab-acts-natively t))
-#+END_SRC
-
-
-* Org Capture
-
-org-captured item by default goes to =buffers.org=.
-
-#+BEGIN_SRC emacs-lisp
-  (with-eval-after-load 'org
-    (setq org-default-notes-file "~/org/buffers.org"))
-#+END_SRC
-
-=org-capture= templates for different sub types.
-
-#+BEGIN_SRC emacs-lisp
-  (defun bds/habit-default-schedule ()
-    (format-time-string "SCHEDULED: <%Y-%m-%d %a +7d>"))
-
-  (with-eval-after-load 'org
-    (setq org-capture-templates
-          '(("t" "todo" entry (file+headline "~/org/buffers.org" "Tasks")
-             "* TODO %?\n")
-            ("f" "favorite" entry (file+headline "~/org/buffers.org" "Favorite")
-             "* %? :FAVORITE:\n%a\n")
-            ("h" "habit" entry (file+headline "~/org/buffers.org" "Tasks")
-             "* TODO %? :HABIT:\n%(bds/habit-default-schedule)\n:PROPERTIES:\n:STYLE: habit\n:END:\n"))))
-#+END_SRC
+    (setq org-log-done 'note))
+#+end_src
 
 * Refile
-
 Targets include this file and any agenda file, up to 3 levels.
 
 #+BEGIN_SRC emacs-lisp
@@ -226,6 +188,71 @@ Save org buffers after a refile.
   (with-eval-after-load 'org
     (advice-add 'org-refile :after 'org-save-all-org-buffers))
 #+end_src
+
+** Refile Completion
+
+We want to opt to use ivy for refile destination completion. After experiment this suits my current org structure really well.
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'org
+    (add-to-list 'ivy-completing-read-handlers-alist
+                 '(org-capture-refile . completing-read-default))
+    (add-to-list 'ivy-completing-read-handlers-alist
+                 '(org-refile . completing-read-default)))
+#+end_src
+
+* Markdown
+
+Github Flavored Markdown exporter for org mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-gfm
+    :straight t
+    :after org)
+#+END_SRC
+
+* Babel (Source code in org)
+
+To make TAB work inside the source code blocks when the language is
+determined (or specified).
+
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'org
+    (setq org-src-tab-acts-natively t))
+#+END_SRC
+
+** Support Graphviz
+
+#+begin_src emacs-lisp
+  (org-babel-do-load-languages 'org-babel-load-languages '((dot . t)))
+#+end_src
+
+* Org Capture
+
+org-captured item by default goes to =buffers.org=.
+
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'org
+    (setq org-default-notes-file "~/org/buffers.org"))
+#+END_SRC
+
+=org-capture= templates for different sub types.
+
+#+BEGIN_SRC emacs-lisp
+  (defun bds/habit-default-schedule ()
+    (format-time-string "SCHEDULED: <%Y-%m-%d %a +7d>"))
+
+  (with-eval-after-load 'org
+    (setq org-capture-templates
+          '(("t" "todo" entry (file+headline "~/org/buffers.org" "Tasks")
+             "* TODO %?\n")
+            ("f" "favorite" entry (file+headline "~/org/buffers.org" "Favorite")
+             "* %? :FAVORITE:\n%a\n")
+            ("i" "idea" entry (file+headline "~/org/buffers.org" "Idea")
+             "* %? :IDEA:\n")
+            ("h" "habit" entry (file+headline "~/org/buffers.org" "Tasks")
+             "* TODO %? :HABIT:\n%(bds/habit-default-schedule)\n:PROPERTIES:\n:STYLE: habit\n:END:\n"))))
+#+END_SRC
 
 * Habit
 
