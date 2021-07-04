@@ -254,12 +254,23 @@ This configures the language server for python. Since for my setup the developme
     (slime-setup '(slime-fancy)))
 #+end_src
 
-* Ledger
+* Ledger and Beancount
+
+** Ledger
 
 *TODO*: Add a hydra map for ledger mode.
 
 #+begin_src emacs-lisp
   (use-package ledger-mode :straight t)
+#+end_src
+
+** Beancount
+
+#+begin_src emacs-lisp
+  (use-package beancount
+    :straight (beancount-mode :type git :host github :repo "beancount/beancount-mode"
+                              :branch "main")
+    :init (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode)))
 #+end_src
 
 * Docker
