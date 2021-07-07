@@ -270,7 +270,9 @@ This configures the language server for python. Since for my setup the developme
   (use-package beancount
     :straight (beancount-mode :type git :host github :repo "beancount/beancount-mode"
                               :branch "main")
-    :init (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode)))
+    :init (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+    :custom
+    (beancount-highlight-transaction-at-point t))
 #+end_src
 
 * Docker
