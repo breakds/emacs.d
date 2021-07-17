@@ -154,7 +154,6 @@ Choose one of the browsers, with the priority in order.
 #+END_SRC
 
 * Backup File Configuration
-
 Save a lot.
 
 #+BEGIN_SRC emacs-lisp
@@ -163,6 +162,12 @@ Save a lot.
         delete-old-versions -1
         version-control t
         vc-make-backup-files t
+        ;; Sadly I cannot move the lock files so that I will have to disable them.
+        ;; https://www.emacswiki.org/emacs/LockFiles
+        ;;
+        ;; Otherwise, the webpack hot reloading just keep dying. I think
+        ;; the other way around is to fix webpack hot reloading, but chose not to.
+        create-lockfiles nil
         auto-save-file-name-transforms `((".*" ,(expand-file-name "auto-save-list/"
                                                                   user-emacs-directory) t)))
 #+END_SRC
