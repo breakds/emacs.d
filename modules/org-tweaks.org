@@ -24,7 +24,9 @@ The preset is applied when entering org-mode buffer so that
     :hook (org-mode . bds/org-mode-preset)
     :config
     (setq org-ellipsis " ▾")
-    (setq org-log-into-drawer t))
+    (setq org-log-into-drawer t)
+    ;; The default font size for latex preview is too small
+    (plist-put org-format-latex-options :scale 1.5))
 #+end_src
 
 ** Easy Template Expansion
