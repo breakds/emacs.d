@@ -20,7 +20,7 @@ Install ivy from git (the [[https://github.com/abo-abo/swiper][git repo]] is cal
     :bind (("C-s" . swiper-isearch)
            ("M-x" . counsel-M-x)
            ("C-x C-f" . counsel-find-file)
-           ("C-x b" . counsel-ibuffer)
+           ("C-x b" . counsel-switch-buffer)
            :map minibuffer-local-map
            ("C-r" . counsel-minibuffer-history)))
 #+END_SRC
