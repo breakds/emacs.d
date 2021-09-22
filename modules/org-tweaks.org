@@ -37,7 +37,7 @@ Easy template expansion is about for example typing =<s= and have it exapanded t
   (with-eval-after-load 'org
     (require 'org-tempo)
     ;; <cc -> #+begin_src c++
-    (add-to-list 'org-structure-template-alist '("cc" . "src c++"))  
+    (add-to-list 'org-structure-template-alist '("cc" . "src c++"))
     ;; <sh -> #+begin_src shell
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     ;; <el -> #+begin_src emacs-lisp
@@ -275,3 +275,25 @@ already done.
     (interactive)
     (org-map-entries 'org-archive-subtree "/DONE/DELEGATED/CANCELLED" 'file))
 #+END_SRC
+
+* Slides
+
+#+begin_src emacs-lisp
+  (defun bds/on-org-presentation-begin ()
+    (text-scale-adjust 2)
+    (org-display-inline-images))
+
+  (defun bds/on-org-presentation-end ()
+    (text-scale-adjust 0))
+
+  (use-package org-tree-slide
+    :straight t
+    :hook ((org-tree-slide-play . bds/on-org-presentation-begin)
+           (org-tree-slide-stop . bds/on-org-presentation-end))
+    :custom
+    (org-image-actual-width nil)
+    (org-tree-slide-activate-message "Presentation alive!")
+    (org-tree-slide-activate-message "Presentation done!")
+    (org-tree-slide-header t)
+    (org-tree-slide-breadcrumbs " // "))
+#+end_src
