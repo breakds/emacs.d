@@ -45,15 +45,23 @@ the basic operations with "C-c b".
 
 The basic map for most frequently used key bindings.
 
+#+begin_src emacs-lisp
+  (defun bds/revert-buffer-noconfirm ()
+    "Call `revert-buffer` without prompting for yes/no"
+    (interactive)
+    (revert-buffer nil t))
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-base-map (:color amaranth)
     "
     Break's Frequently Used Keys
     ^
-    ^Fast^              ^Mode^         
+    ^Fast^              ^Mode^
     ^──────────^────────^───────^──────
     _r_ recent files    _u_ undo tree
-    _g_ ag              _t_ treemacs   
+    _g_ ag              _t_ treemacs
+    _b_ revert buffer
     ─────────────────────────────────────
     ^[_q_]: quit
     "
@@ -61,7 +69,8 @@ The basic map for most frequently used key bindings.
     ("r" counsel-recentf :exit t)
     ("t" treemacs :exit t)
     ("g" counsel-ag :exit t)
-    ("u" undo-tree-visualize :exit t))
+    ("u" undo-tree-visualize :exit t)
+    ("b" bds/revert-buffer-noconfirm :exit t))
 #+END_SRC
 
 Being able to zoom in and out is useful
@@ -211,5 +220,5 @@ navigate/jump between them.
     :config
     (global-undo-tree-mode)
     (setq undo-tree-visualizer-timestamps t
-          undo-tree-visualizer-diff t))  
+          undo-tree-visualizer-diff t))
 #+end_src
