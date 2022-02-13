@@ -275,6 +275,37 @@ This configures the language server for python. Since for my setup the developme
     (beancount-highlight-transaction-at-point t))
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun bds/beancount-chapter ()
+    (interactive)
+    ;; TODO Read this from a template file instead of something like this.
+    (let ((this-date (format-time-string "%Y.%m.%d")))
+      ;; Chapter Title
+      (insert ";; +------------------------------------------------------------+\n")
+      (insert (format ";; | %s Account Management                              |\n"
+                      this-date))
+      (insert ";; +------------------------------------------------------------+\n")
+      (insert "\n\n")
+
+      ;; Section Chase
+      (insert (format ";; %s Chase\n" this-date))
+      (insert (format ";; --------------------\n"))
+      (insert "\n\n")
+
+      ;; Section Chase
+      (insert (format ";; %s Chase\n" this-date))
+      (insert (format ";; --------------------\n"))
+      (insert "\n\n")
+
+      ;; Section Rental
+      (insert (format ";; %s Rental \n" this-date))
+      (insert (format ";; -------------------------\n"))
+      (insert "pushtag #rental\n")
+      (insert "\n\n")
+      (insert "poptag #rental\n")
+      (insert "\n\n")))
+#+end_src
+
 * Docker
 
 The =dockerfile-mode= makes emacs recognize =Dockerfile= syntax
