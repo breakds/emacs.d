@@ -220,5 +220,8 @@ navigate/jump between them.
     :config
     (global-undo-tree-mode)
     (setq undo-tree-visualizer-timestamps t
-          undo-tree-visualizer-diff t))
+          undo-tree-visualizer-diff t)
+    ;; I think it is probably better to handle long term change history
+    ;; with git manually.
+    (setq undo-tree-auto-save-history nil))
 #+end_src
