@@ -219,7 +219,20 @@ This configures the language server for python. Since for my setup the developme
       (require 'lsp-python-ms)
       (lsp)))
 
-  (use-package lsp-python-ms
+  (defun bds/start-lsp-pyright ()
+    ;; The two variable bds/lsp-python-ms-exe and
+    ;; bds/lsp-python-ms-python-exe are are to make sure that the python
+    ;; and python language server executables are only found once.
+    ;;
+    ;; This means that the python lsp mode will only be bound to the
+    ;; first python and python language server found in one session. I
+    ;; personally think this is the most predictable and thus reasonable
+    ;; behavior.
+      (require 'lsp-pyright)
+      (lsp))
+
+
+  (use-package lsp-pyright
     :straight t
     :init
     (defvar bds/lsp-python-ms-exe nil)
@@ -230,7 +243,7 @@ This configures the language server for python. Since for my setup the developme
                            ;; kicks in. This is to wait for the direnv
                            ;; to be activated which brings in the python
                            ;; and python language server.
-                           (run-at-time "2 sec" nil #'bds/start-lsp-python-ms))))
+                           (run-at-time "2 sec" nil #'bds/start-lsp-pyright))))
 #+end_src
 
 * Protocol Buffer
