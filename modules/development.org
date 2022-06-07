@@ -92,7 +92,6 @@ This makes Emacs respect =.envrc= file for direnv. I am mainly using =direnv= fo
 #+begin_src emacs-lisp
   (use-package direnv
     :straight t
-    :defer t
     :config (direnv-mode))
 #+end_src
 
@@ -243,7 +242,6 @@ This configures the language server for python. Since for my setup the developme
 
   (use-package lsp-pyright
     :straight t
-    :defer t
     :init
     (defvar bds/lsp-python-ms-exe nil)
     (defvar bds/lsp-python-ms-python-exe nil)
