@@ -23,6 +23,15 @@
 ;;; * C-x <Right> and C-x <Left>
 ;;;   winner-mode cycle windows.
 
+;;; Increase the garbage collection threshold (by default it is 800KB, which is
+;;; too conservative for a mordern computer) to 50MB. This will effectively
+;;; reduce the number of gc performed during startup, and can increase the
+;;; startup speed.
+;;;
+;;; On Samaritan with Ryzen 9 3900X, it reduces the startup time from 2.6
+;;; seconds to 2.0 seconds.
+(setq gc-cons-threshold (* 50 1000 1000))
+
 ;;; +============================================================+
 ;;; | Basic Utilities for Emacs Configuration                    |
 ;;; +------------------------------------------------------------+
@@ -89,3 +98,7 @@
 (bds-load-config-module "modules" "org-tweaks.org")
 (bds-load-config-module "modules" "development.org")
 (garbage-collect)
+
+;; Now that startup is completed. Descreasing the GC threshold (i.e.
+;; more frequently GC).
+(setq gc-cons-threshold (* 2 1000 1000))

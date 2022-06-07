@@ -154,6 +154,18 @@ Batch kill buffers.
         do (kill-buffer buf)))
 #+END_SRC
 
+Measure the start up time
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (message "Emacs fully started up in %s with %d garbage collections."
+                       ;; Time elapsed
+                       (format "%.2f seconds" (float-time (time-subtract after-init-time
+                                                                         before-init-time)))
+                       gcs-done)))
+#+end_src
+
 * Browser
 
 Choose one of the browsers, with the priority in order.
