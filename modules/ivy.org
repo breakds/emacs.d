@@ -40,5 +40,6 @@ Install ivy from git (the [[https://github.com/abo-abo/swiper][git repo]] is cal
   #+begin_src emacs-lisp
     (use-package ivy-rich
       :straight t
+      :defer t
       :init (ivy-rich-mode 1))
   #+end_src

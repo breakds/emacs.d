@@ -12,6 +12,7 @@ Use magit for git. The customization on =magit-display-buffer-function= makes it
     ;; Defer loading magit until magit-status is called
     :commands magit-status
     :straight t
+    :defer t
     :bind (("C-x g" . magit-status))
     :custom (magit-display-buffer-function
              #'magit-display-buffer-same-window-except-diff-v1))
@@ -29,6 +30,7 @@ This package [[https://magit.vc/manual/forge/][forge]] adds integration with Git
 #+begin_src emacs-lisp
   (use-package forge
     :straight t
+    :defer t
     :after magit)
 #+end_src
 
@@ -69,6 +71,7 @@ Projectile has a very good [[https://docs.projectile.mx/][documentation]].
   (use-package projectile
     :straight t
     :diminish project-tile-mode
+    :defer t
     :config (projectile-mode)
     :bind (("C-c p" . 'hydra-projectile/body))
     :init
@@ -89,6 +92,7 @@ This makes Emacs respect =.envrc= file for direnv. I am mainly using =direnv= fo
 #+begin_src emacs-lisp
   (use-package direnv
     :straight t
+    :defer t
     :config (direnv-mode))
 #+end_src
 
@@ -101,6 +105,7 @@ Thanks to microsoft's great effrot invested in the language backend, we have [[h
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :straight t
+    :defer t
     :commands (lsp lsp-deferred)  ;; Triggered loading only by those commands
     :init (setq lsp-keymap-prefix "C-c l"))
 #+end_src
@@ -114,6 +119,7 @@ We also add the package =company-box= just to make the prompts a little bit more
 #+begin_src emacs-lisp
   (use-package company
     :straight t
+    :defer t
     :hook (prog-mode . company-mode)
     :bind
     (:map company-active-map
@@ -141,7 +147,7 @@ It also add the key bindings and support for =clang-format=.
        (clang-format-buffer)
        (back-to-indentation))
 
-  (use-package clang-format :straight t)
+  (use-package clang-format :straight t :defer t)
 
   (use-package cc-mode
     :mode ("\\.h\\'" . c++-mode) ;; Otherwise it will be c-mode
@@ -152,6 +158,7 @@ It also add the key bindings and support for =clang-format=.
 
   (use-package modern-cpp-font-lock
     :straight t
+    :defer t
     :hook (c++-mode . modern-cpp-font-lock-mode))
 #+end_src
 
@@ -160,6 +167,7 @@ It also add the key bindings and support for =clang-format=.
 #+begin_src emacs-lisp
   (use-package cmake-mode
     :straight t
+    :defer t
     :config (setq cmake-tab-width 4))
 #+end_src
 
@@ -174,6 +182,7 @@ Use =web-mode= for this with some customization.
 #+begin_src emacs-lisp
   (use-package web-mode
     :straight t
+    :defer t
     :mode (("\\.ts\\'" . web-mode)
            ("\\.tsx\\'" . web-mode)
            ("\\.js\\'" . web-mode)
@@ -190,7 +199,7 @@ Use =web-mode= for this with some customization.
 * Nix
 
 #+begin_src emacs-lisp
-  (use-package nix-mode :straight t)
+  (use-package nix-mode :straight t :defer t)
 #+end_src
 
 * Python
@@ -234,6 +243,7 @@ This configures the language server for python. Since for my setup the developme
 
   (use-package lsp-pyright
     :straight t
+    :defer t
     :init
     (defvar bds/lsp-python-ms-exe nil)
     (defvar bds/lsp-python-ms-python-exe nil)
@@ -249,12 +259,12 @@ This configures the language server for python. Since for my setup the developme
 * Protocol Buffer
 
 #+begin_src emacs-lisp
-  (use-package protobuf-mode :straight t)
+  (use-package protobuf-mode :straight t :defer t)
 #+end_src
 
 * Rust
 #+begin_src emacs-lisp
-  (use-package rust-mode :straight t)
+  (use-package rust-mode :straight t :defer t)
 #+end_src
 
 * Common Lisp
@@ -262,6 +272,7 @@ This configures the language server for python. Since for my setup the developme
 #+begin_src emacs-lisp
   (use-package slime
     :straight t
+    :defer t
     :config
     (setq inferior-lisp-program "quicklisp run")
     (slime-setup '(slime-fancy)))
@@ -274,7 +285,7 @@ This configures the language server for python. Since for my setup the developme
 *TODO*: Add a hydra map for ledger mode.
 
 #+begin_src emacs-lisp
-  (use-package ledger-mode :straight t)
+  (use-package ledger-mode :straight t :defer t)
 #+end_src
 
 ** Beancount
@@ -283,6 +294,7 @@ This configures the language server for python. Since for my setup the developme
   (use-package beancount
     :straight (beancount-mode :type git :host github :repo "beancount/beancount-mode"
                               :branch "main")
+    :defer t
     :init (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
     :custom
     (beancount-highlight-transaction-at-point t))
@@ -327,19 +339,21 @@ correctly.
 #+begin_src emacs-lisp
   (use-package dockerfile-mode
     :straight t
+    :defer t
     :init (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
 #+end_src
 
 * LaTeX
 
 #+BEGIN_SRC emacs-lisp
-  (use-package tex :straight auctex)
+  (use-package tex :straight auctex :defer t)
 #+END_SRC
 
 * Graphviz (DOT)
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (use-package graphviz-dot-mode
     :straight t
+    :defer t
     :custom (graphviz-dot-indent-width 4))
 #+end_src
