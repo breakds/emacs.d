@@ -15,7 +15,8 @@ Install ivy from git (the [[https://github.com/abo-abo/swiper][git repo]] is cal
     :straight (counsel :type git :host github :repo "abo-abo/swiper")
     :init (setq ivy-use-virtual-buffers t
                 ivy-count-format "(%d/%d) "
-                ivy-height 17)
+                ivy-height 17
+                counsel-ag-base-command (list "ag" "--vimgrep" "--ignore" ".*ipynb" "%s"))
     :config (ivy-mode 1)
     :bind (("C-s" . swiper-isearch)
            ("M-x" . counsel-M-x)
