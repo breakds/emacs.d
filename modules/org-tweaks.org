@@ -18,7 +18,13 @@ The preset is applied when entering org-mode buffer so that
     (org-indent-mode 1)
     (visual-line-mode 1)
     (visual-fill-column-mode 1)
-    (setq visual-fill-column-width 100))
+    (setq visual-fill-column-width 100)
+    ;; Hiding emphasis markers will hide the markers for
+    ;; *bold* ~code~ =verbatim= so that they appear more readable
+    (setq org-hide-emphasis-markers t)
+    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch)))
 
   (use-package org
     :hook (org-mode . bds/org-mode-preset)
