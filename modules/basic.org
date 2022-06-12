@@ -224,7 +224,6 @@ navigate/jump between them.
 
 #+begin_src emacs-lisp
   (use-package undo-tree
-    :defer t
     :straight t
     :config
     (global-undo-tree-mode)
