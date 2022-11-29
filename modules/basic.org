@@ -209,6 +209,8 @@ Run gc upon focus-out. Emacs should feel snappier.
 
 * Scrolling
 
+TODO(breakds): There will be ~pixel-scroll-prcesion-mode~ in Emacs 29. Use it when it comes out.
+
 #+BEGIN_SRC emacs-lisp
   (setq scroll-step 1)
   (defun scroll-up-slightly () (interactive) (scroll-up 3))
