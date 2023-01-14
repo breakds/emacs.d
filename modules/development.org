@@ -355,3 +355,12 @@ correctly.
     :defer t
     :custom (graphviz-dot-indent-width 4))
 #+end_src
+
+* XML
+
+Default indentation is 2. Make it 4.
+
+#+begin_src emacs-lisp
+  (setq nxml-child-indent 4
+        nxml-attribute-indent 4)
+#+end_src
