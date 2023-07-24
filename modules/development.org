@@ -232,7 +232,7 @@ This configures the language server for python. Since for my setup the developme
       ;; bds/lsp-python-ms-python-exe are are to make sure that the python
       ;; and python language server executables are only found once.
       ;;
-      ;; This means that the python lsp mode will only be bound to the
+      ;; This means that the pytnhon lsp mode will only be bound to the
       ;; first python and python language server found in one session. I
       ;; personally think this is the most predictable and thus reasonable
       ;; behavior.
@@ -248,8 +248,6 @@ This configures the language server for python. Since for my setup the developme
       (setq lsp-python-ms-auto-install-server nil) ;; Let me manage it
       (setq lsp-pyright-stub-path
             (concat (getenv "HOME") ".local/share/pytypestubs/python-type-stubs"))
-      (setq lsp-pyright-typeshed-paths
-            `(,(concat (getenv "HOME") ".local/share/pytypestubs/typeshed")))
       :hook (python-mode . (lambda ()
                              ;; Wait for 2 seconds delay before lsp mode
                              ;; kicks in. This is to wait for the direnv
