@@ -206,52 +206,56 @@ Use =web-mode= for this with some customization.
 This configures the language server for python. Since for my setup the development environment is all in =flake.nix= so that both =python= and =python-language-server= will not be available until =direnv= kicks in. The current hack is to rely on [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Timers.html][timer]] to delay the initialization of =lsp-mode=, but maybe by applying the proper hook it does not have to be so.
 
 #+begin_src emacs-lisp
-  (defun bds/start-lsp-python-ms ()
-    ;; The two variable bds/lsp-python-ms-exe and
-    ;; bds/lsp-python-ms-python-exe are are to make sure that the python
-    ;; and python language server executables are only found once.
-    ;;
-    ;; This means that the python lsp mode will only be bound to the
-    ;; first python and python language server found in one session. I
-    ;; personally think this is the most predictable and thus reasonable
-    ;; behavior.
-    (when (not bds/lsp-python-ms-exe)
-      (setq bds/lsp-python-ms-exe (executable-find "python-language-server")))
-    (when (not bds/lsp-python-ms-python-exe)
-      (setq bds/lsp-python-ms-python-exe (executable-find "python")))
+    (defun bds/start-lsp-python-ms ()
+      ;; The two variable bds/lsp-python-ms-exe and
+      ;; bds/lsp-python-ms-python-exe are are to make sure that the python
+      ;; and python language server executables are only found once.
+      ;;
+      ;; This means that the python lsp mode will only be bound to the
+      ;; first python and python language server found in one session. I
+      ;; personally think this is the most predictable and thus reasonable
+      ;; behavior.
+      (when (not bds/lsp-python-ms-exe)
+        (setq bds/lsp-python-ms-exe (executable-find "python-language-server")))
+      (when (not bds/lsp-python-ms-python-exe)
+        (setq bds/lsp-python-ms-python-exe (executable-find "python")))
 
-    (when (and bds/lsp-python-ms-python-exe
-               bds/lsp-python-ms-exe)
-      (setq lsp-python-ms-executable bds/lsp-python-ms-exe)
-      (setq lsp-python-ms-python-executable bds/lsp-python-ms-python-exe)
-      (require 'lsp-python-ms)
-      (lsp)))
+      (when (and bds/lsp-python-ms-python-exe
+                 bds/lsp-python-ms-exe)
+        (setq lsp-python-ms-executable bds/lsp-python-ms-exe)
+        (setq lsp-python-ms-python-executable bds/lsp-python-ms-python-exe)
+        (require 'lsp-python-ms)
+        (lsp)))
 
-  (defun bds/start-lsp-pyright ()
-    ;; The two variable bds/lsp-python-ms-exe and
-    ;; bds/lsp-python-ms-python-exe are are to make sure that the python
-    ;; and python language server executables are only found once.
-    ;;
-    ;; This means that the python lsp mode will only be bound to the
-    ;; first python and python language server found in one session. I
-    ;; personally think this is the most predictable and thus reasonable
-    ;; behavior.
-      (require 'lsp-pyright)
-      (lsp))
+    (defun bds/start-lsp-pyright ()
+      ;; The two variable bds/lsp-python-ms-exe and
+      ;; bds/lsp-python-ms-python-exe are are to make sure that the python
+      ;; and python language server executables are only found once.
+      ;;
+      ;; This means that the python lsp mode will only be bound to the
+      ;; first python and python language server found in one session. I
+      ;; personally think this is the most predictable and thus reasonable
+      ;; behavior.
+        (require 'lsp-pyright)
+        (lsp))
 
 
-  (use-package lsp-pyright
-    :straight t
-    :init
-    (defvar bds/lsp-python-ms-exe nil)
-    (defvar bds/lsp-python-ms-python-exe nil)
-    (setq lsp-python-ms-auto-install-server nil) ;; Let me manage it
-    :hook (python-mode . (lambda ()
-                           ;; Wait for 2 seconds delay before lsp mode
-                           ;; kicks in. This is to wait for the direnv
-                           ;; to be activated which brings in the python
-                           ;; and python language server.
-                           (run-at-time "2 sec" nil #'bds/start-lsp-pyright))))
+    (use-package lsp-pyright
+      :straight t
+      :init
+      (defvar bds/lsp-python-ms-exe nil)
+      (defvar bds/lsp-python-ms-python-exe nil)
+      (setq lsp-python-ms-auto-install-server nil) ;; Let me manage it
+      (setq lsp-pyright-stub-path
+            (concat (getenv "HOME") ".local/share/pytypestubs/python-type-stubs"))
+      (setq lsp-pyright-typeshed-paths
+            `(,(concat (getenv "HOME") ".local/share/pytypestubs/typeshed")))
+      :hook (python-mode . (lambda ()
+                             ;; Wait for 2 seconds delay before lsp mode
+                             ;; kicks in. This is to wait for the direnv
+                             ;; to be activated which brings in the python
+                             ;; and python language server.
+                             (run-at-time "2 sec" nil #'bds/start-lsp-pyright))))
 #+end_src
 
 * Protocol Buffer
