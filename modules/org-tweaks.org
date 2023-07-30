@@ -85,6 +85,27 @@ Defines the TODO keywords andthe tag list.
                           ("FAVORITE" . ?f))))
 #+END_SRC
 
+** Link Image
+
+#+begin_src emacs-lisp
+  (defun bds/org/find-image-in (path caller)
+    (ivy-read "Select Image: "
+              (directory-files-recursively path ".*\\.\\(png\\|PNG\\|jpg|JPG\\|\\)$")
+              :require-match t
+              :action (lambda (image-path) (org-insert-link nil image-path nil))
+              :caller caller))
+
+  (defun bds/org/find-picture ()
+    (interactive)
+    (bds/org/find-image-in "/home/breakds/syncthing/workspace/pictures"
+                           'bds/org/find-picture))
+
+  (defun bds/org/find-screenshot ()
+    (interactive)
+    (bds/org/find-image-in "/home/breakds/syncthing/workspace/screenshots"
+                           'bds/org/find-screenshot))
+#+end_src
+
 ** Key Bindings
 
 | Bindings | Description                                       |
@@ -121,6 +142,27 @@ Use =<F6>= to paste a link in the kill ring (i.e. paste bin). By default it will
       (insert "]]")))
   (define-key org-mode-map (kbd "<f6>") 'bds/org/yank-link)
 #+END_SRC
+
+#+begin_src emacs-lisp
+  (defhydra bds/org/hydra-extra (:color amaranth)
+    "
+    Break's org specialization keymap
+    ^
+    ^Links^             ^Slides^
+    ^──────────^────────^───────^──────
+    _p_ Pictures        _t_ Start slides
+    _s_ Screenshots
+    _y_ Hyperlink
+    ─────────────────────────────────────
+    ^[_q_]: quit
+    "
+    ("p" bds/org/find-picture :exit t)
+    ("s" bds/org/find-screenshot :exit t)
+    ("t" org-tree-slide-play-with-timer :exit t)
+    ("y" bds/org/yank-link :exit t)
+    ("q" nil))
+  (define-key org-mode-map (kbd "C-c i") 'bds/org/hydra-extra/body)
+#+end_src
 
 * Org Agenda
 
@@ -284,22 +326,35 @@ already done.
 
 * Slides
 
-#+begin_src emacs-lisp
-  (defun bds/on-org-presentation-begin ()
-    (text-scale-adjust 2)
-    (org-display-inline-images))
+** Tree Slides
 
-  (defun bds/on-org-presentation-end ()
-    (text-scale-adjust 0))
+  #+begin_src emacs-lisp
+    (defun bds/on-org-presentation-begin ()
+      (text-scale-adjust 2)
+      (org-display-inline-images))
 
-  (use-package org-tree-slide
-    :straight t
-    :hook ((org-tree-slide-play . bds/on-org-presentation-begin)
-           (org-tree-slide-stop . bds/on-org-presentation-end))
-    :custom
-    (org-image-actual-width nil)
-    (org-tree-slide-activate-message "Presentation alive!")
-    (org-tree-slide-activate-message "Presentation done!")
-    (org-tree-slide-header t)
-    (org-tree-slide-breadcrumbs " // "))
-#+end_src
+    (defun bds/on-org-presentation-end ()
+      (text-scale-adjust 0))
+
+    (use-package org-tree-slide
+      :straight t
+      :hook ((org-tree-slide-play . bds/on-org-presentation-begin)
+             (org-tree-slide-stop . bds/on-org-presentation-end))
+      :custom
+      (org-image-actual-width nil)
+      (org-tree-slide-activate-message "Presentation alive!")
+      (org-tree-slide-activate-message "Presentation done!")
+      (org-tree-slide-header t)
+      (org-tree-slide-breadcrumbs " // "))
+  #+end_src
+
+** Reveal.js (not working)
+
+    #+begin_src emacs-lisp
+      ;; (use-package ox-reveal
+      ;;   :straight t
+      ;;   :custom
+      ;;   (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+      ;;   (org-reveal-title-slide nil))
+    #+end_src
+
