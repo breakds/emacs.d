@@ -104,6 +104,11 @@ Defines the TODO keywords andthe tag list.
     (interactive)
     (bds/org/find-image-in "/home/breakds/syncthing/workspace/screenshots"
                            'bds/org/find-screenshot))
+
+  (defun bds/org/find-drawing ()
+    (interactive)
+    (bds/org/find-image-in "/home/breakds/syncthing/workspace/drawing"
+                           'bds/org/find-drawing))
 #+end_src
 
 ** Key Bindings
@@ -152,14 +157,16 @@ Use =<F6>= to paste a link in the kill ring (i.e. paste bin). By default it will
     ^──────────^────────^───────^──────
     _p_ Pictures        _t_ Start slides
     _s_ Screenshots
+    _d_ Drawings
     _y_ Hyperlink
     ─────────────────────────────────────
     ^[_q_]: quit
     "
     ("p" bds/org/find-picture :exit t)
     ("s" bds/org/find-screenshot :exit t)
-    ("t" org-tree-slide-play-with-timer :exit t)
+    ("d" bds/org/find-drawing :exit t)
     ("y" bds/org/yank-link :exit t)
+    ("t" org-tree-slide-play-with-timer :exit t)
     ("q" nil))
   (define-key org-mode-map (kbd "C-c i") 'bds/org/hydra-extra/body)
 #+end_src
@@ -192,7 +199,7 @@ When displaying agenda, find tasks from the following files.
                                 "~/org/work/wonderland.org")))
 #+END_SRC
 
-[[id:a201358c-1eab-4a33-8b2b-ac27b26d1bcb][Refile]]When you log something as DONE, lot the time.
+[[id:a201358c-1eab-4a33-8b2b-ac27b26d1bcb][Refile]] When you log something as DONE, log the time.
 
 #+begin_src emacs-lisp
   (with-eval-after-load 'org
