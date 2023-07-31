@@ -89,11 +89,16 @@ Defines the TODO keywords andthe tag list.
 
 #+begin_src emacs-lisp
   (defun bds/org/find-image-in (path caller)
-    (ivy-read "Select Image: "
-              (directory-files-recursively path ".*\\.\\(png\\|PNG\\|jpg|JPG\\|\\)$")
-              :require-match t
-              :action (lambda (image-path) (org-insert-link nil image-path nil))
-              :caller caller))
+    (let* ((exts '("png" "jpg" "svg"))
+           (full-exts (append exts (mapcar #'upcase exts)))
+           (regex (concat ".*\\.\\("
+                          (mapconcat 'identity full-exts "\\|")
+                          "\\)$")))
+      (ivy-read "Select Image: "
+                (directory-files-recursively path regex)
+                :require-match t
+                :action (lambda (image-path) (org-insert-link nil image-path nil))
+                :caller caller)))
 
   (defun bds/org/find-picture ()
     (interactive)
