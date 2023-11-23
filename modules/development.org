@@ -367,3 +367,10 @@ Default indentation is 2. Make it 4.
         nxml-attribute-indent 4)
   (add-to-list 'auto-mode-alist '("\\.xml\\.tmpl\\'" . nxml-mode))
 #+end_src
+
+* YAML
+
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :straight t)
+#+end_src
