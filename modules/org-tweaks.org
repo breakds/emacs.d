@@ -14,6 +14,10 @@ The preset is applied when entering org-mode buffer so that
   (use-package visual-fill-column
     :straight t)
 
+  (defface org-code-bds
+     '((t (:inherit fixed-pitch :foreground "#2aa198" :background "#eee8d5")))
+     "Face for inline code with custom background color.")
+
   (defun bds/org-mode-preset ()
     (org-indent-mode 1)
     (visual-line-mode 1)
@@ -22,6 +26,13 @@ The preset is applied when entering org-mode buffer so that
     ;; Hiding emphasis markers will hide the markers for
     ;; *bold* ~code~ =verbatim= so that they appear more readable
     (setq org-hide-emphasis-markers t)
+    (setq org-emphasis-alist
+          '(("*" (bold :foreground "deep sky blue"))
+            ("/" (italic :foreground "Sienna"))
+            ("_" (underline :foreground "LightSteelBlue"))
+            ("=" org-verbatim verbatim)
+            ("~" org-code-bds verbatim)
+            ("+" (:strike-through t))))
     (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch)))
