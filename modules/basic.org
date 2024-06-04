@@ -168,10 +168,11 @@ Choose one of the browsers, with the priority in order.
 
 #+BEGIN_SRC emacs-lisp
   (setq browse-url-generic-program
-        (or (locate-file "vivaldi" exec-path)
-            (locate-file "google-chrome" exec-path)
+        (or (locate-file "google-chrome" exec-path)
             (locate-file "google-chrome-stable" exec-path)
-            (locate-file "firefox" exec-path)))
+            (locate-file "firefox" exec-path)
+            (locate-file "vivaldi" exec-path)            
+            ))
   (setq browse-url-browser-function 'browse-url-generic)
 #+END_SRC
 
