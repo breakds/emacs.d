@@ -29,7 +29,7 @@ The preset is applied when entering org-mode buffer so that
     (setq org-emphasis-alist
           '(("*" (bold :foreground "deep sky blue"))
             ("/" (italic :foreground "Sienna"))
-            ("_" (underline :foreground "LightSteelBlue"))
+            ("_" (underline :foreground "deep pink"))
             ("=" org-verbatim verbatim)
             ("~" org-code-bds verbatim)
             ("+" (:strike-through t))))
