@@ -48,7 +48,7 @@ an integer in units of =1/10= point.
 #+BEGIN_SRC emacs-lisp
   (set-face-attribute 'default nil
 		      :font "Fira Code"
-		      :height 100)
+		      :height (if (getenv "WAYLAND_DISPLAY") 120 100))
 #+END_SRC
 
 * Time
