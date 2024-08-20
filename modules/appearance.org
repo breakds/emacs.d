@@ -48,10 +48,11 @@ an integer in units of =1/10= point.
 #+BEGIN_SRC emacs-lisp
   (let ((hostname (system-name)))
     (set-face-attribute 'default nil
-                        :font "Fira Code"
-                        :height (cond ((string-equal hostname "brock") 100)
-                                      ((getenv "WAYLAND_DISPLAY") 120)
-                                      (t 100))))
+			:font "Fira Code"
+			:height (cond ((or (string-equal hostname "brock")
+					   (string-equal hostname "blocker")) 100)
+				      ((getenv "WAYLAND_DISPLAY") 120)
+				      (t 100))))
 #+END_SRC
 
 * Time
