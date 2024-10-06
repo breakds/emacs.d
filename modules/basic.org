@@ -62,6 +62,7 @@ The basic map for most frequently used key bindings.
     _r_ recent files    _u_ undo tree
     _g_ ag              _t_ treemacs
     _b_ revert buffer
+    _x_ boxed text
     ─────────────────────────────────────
     ^[_q_]: quit
     "
@@ -70,7 +71,8 @@ The basic map for most frequently used key bindings.
     ("t" treemacs :exit t)
     ("g" counsel-ag :exit t)
     ("u" undo-tree-visualize :exit t)
-    ("b" bds/revert-buffer-noconfirm :exit t))
+    ("b" bds/revert-buffer-noconfirm :exit t)
+    ("x" bds/boxed-text :exit t))
 #+END_SRC
 
 Being able to zoom in and out is useful
@@ -161,6 +163,22 @@ Measure the start up time
                                                                          before-init-time)))
                        gcs-done)))
 #+end_src
+
+Create a boxed text, useful when creating comments and documentation.
+
+#+begin_src emacs-lisp
+  (defun bds/boxed-text (text)
+    "Add a box around the input text"
+    (interactive "sEnter text: ")
+    (let* ((len (length text))
+           (line1 (concat "┌" (make-string (+ len 2) ?─) "┐"))
+           (line2 (concat "│ " text " │"))
+           (line3 (concat "└" (make-string (+ len 2) ?─) "┘")))
+      (insert (concat line1 "\n" line2 "\n" line3 "\n"))))
+#+end_src
+
+#+RESULTS:
+: bds/boxed-text
 
 * Browser
 
