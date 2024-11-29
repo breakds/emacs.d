@@ -48,7 +48,7 @@ an integer in units of =1/10= point.
 #+BEGIN_SRC emacs-lisp
   (let ((hostname (system-name)))
     (set-face-attribute 'default nil
-                        :font "Fira Code"
+                        :font "JetBrainsMonoNL NFP Light"
                         :height (cond ((or (string-equal hostname "brock")
                                            (string-equal hostname "blocker")
                                            (string-equal hostname "hand"))
