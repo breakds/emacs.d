@@ -63,6 +63,7 @@ The basic map for most frequently used key bindings.
     _g_ ag              _t_ treemacs
     _b_ revert buffer
     _x_ boxed text
+    _a_ aider
     ─────────────────────────────────────
     ^[_q_]: quit
     "
@@ -72,7 +73,8 @@ The basic map for most frequently used key bindings.
     ("g" counsel-ag :exit t)
     ("u" undo-tree-visualize :exit t)
     ("b" bds/revert-buffer-noconfirm :exit t)
-    ("x" bds/boxed-text :exit t))
+    ("x" bds/boxed-text :exit t)
+    ("a" aider-transient-menu :exit t))
 #+END_SRC
 
 Being able to zoom in and out is useful

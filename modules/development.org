@@ -2,7 +2,6 @@
 #+STARTUP: showall
 
 * Language Neutral Tooling and Utilities
-
 ** Git
 
 Use magit for git. The customization on =magit-display-buffer-function= makes it prompts =magit-status= in the same windows instead of opening a new one.
@@ -95,6 +94,14 @@ This makes Emacs respect =.envrc= file for direnv. I am mainly using =direnv= fo
     :config (direnv-mode))
 #+end_src
 
+* AI Programming Assistant
+** Aider
+#+begin_src emacs-lisp
+  (use-package aider
+    :straight (:host github :repo "tninja/aider.el" :files ("aider.el"))
+    :config
+    (setq aider-args '("--model" "anthropic/claude-3-5-sonnet-20241022")))
+#+end_src
 * Language Server Protocol (LSP)
 
 Thanks to microsoft's great effrot invested in the language backend, we have [[https://microsoft.github.io/language-server-protocol/][LSP]]. I think it is mainly designed for VSCode but many other IDEs have optted in for it. This section configures the integration with LSP for Emacs.
