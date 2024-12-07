@@ -116,6 +116,14 @@ Thanks to microsoft's great effrot invested in the language backend, we have [[h
     :init (setq lsp-keymap-prefix "C-c l"))
 #+end_src
 
+Since by default snippet is enabled, let's also install ~yasnippet~.
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :straight t
+    :init (yas-global-mode 1))
+#+end_src
+
 ** Company Mode
 
 Company is a text completion framework for Emacs. It does not have to work with LSP, but working with LSP can provide great experience.
