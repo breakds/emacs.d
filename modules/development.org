@@ -185,6 +185,12 @@ It also add the key bindings and support for =clang-format=.
     :config (setq cmake-tab-width 4))
 #+end_src
 
+** CUDA
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.cu\\'" . c++-mode))
+#+end_src
+
 * JavaScript, TypeScript, HTML and CSS
 
 Use =web-mode= for this with some customization.
