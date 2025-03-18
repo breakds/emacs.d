@@ -114,6 +114,17 @@ Thanks to microsoft's great effrot invested in the language backend, we have [[h
     :defer t
     :commands (lsp lsp-deferred)  ;; Triggered loading only by those commands
     :init (setq lsp-keymap-prefix "C-c l"))
+
+  (use-package lsp-ui
+    :straight t
+    :commands lsp-ui-mode
+    :config
+    (setq lsp-ui-doc-enable nil)
+    (setq lsp-ui-header t)
+    (setq lsp-ui-doc-include-signature t)
+    (setq lsp-ui-doc-border (face-foreground 'default))
+    (setq lsp-ui-sideline-show-code-actions t)
+    (setq lsp-ui-sideline-delay 0.05))
 #+end_src
 
 Since by default snippet is enabled, let's also install ~yasnippet~.
