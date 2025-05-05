@@ -23,7 +23,7 @@ Use solarized light as the theme for.
     ;; Global Settings
     (setq doom-themes-enable-bold t
   	doom-themes-enable-italic t)
-    (load-theme 'doom-nord-aurora t)
+    (load-theme 'doom-monokai-pro t)
     (doom-themes-visual-bell-config)
     ;; Neotree
     ;; Might require nerd-icons
