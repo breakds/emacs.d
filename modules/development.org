@@ -69,9 +69,8 @@ Projectile has a very good [[https://docs.projectile.mx/][documentation]].
 
   (use-package projectile
     :straight t
-    :diminish project-tile-mode
-    :defer t
-    :config (projectile-mode)
+    :diminish projectile-mode
+    :config (projectile-mode +1)
     :bind (("C-c p" . 'hydra-projectile/body))
     :init
     (when (file-directory-p "~/projects")
@@ -81,8 +80,11 @@ Projectile has a very good [[https://docs.projectile.mx/][documentation]].
   (use-package counsel-projectile
     :straight t
     :after projectile
-    :config (counsel-projectile-mode))
+    :config (counsel-projectile-mode +1))
 #+END_SRC
+
+#+RESULTS:
+: t
 
 ** Direnv
 
@@ -101,23 +103,39 @@ Thanks to microsoft's great effrot invested in the language backend, we have [[h
 ** LSP Mode
 
 #+begin_src emacs-lisp
-  (use-package lsp-mode
-    :straight t
-    :defer t
-    :commands (lsp lsp-deferred)  ;; Triggered loading only by those commands
-    :init (setq lsp-keymap-prefix "C-c l"))
+  (defun bds/cleanup-noexiststent-lsp-folder ()
+    "Remove workspace folders from lsp-mode session that no longer exist"
+    (interactive)
+    (let* ((session (lsp-session))
+           (folders (lsp-session-folders session))
+           (invalid-folders (seq-remove #'file-directory-p folders)))
+      (dolist (folder invalid-folders)
+        (lsp-workspace-folders-remove folder))
+      (message "Removed %d non-existent workspace folders from LSP sessions."
+               (length invalid-folders))))
 
-  (use-package lsp-ui
-    :straight t
-    :commands lsp-ui-mode
-    :config
-    (setq lsp-ui-doc-enable nil)
-    (setq lsp-ui-header t)
-    (setq lsp-ui-doc-include-signature t)
-    (setq lsp-ui-doc-border (face-foreground 'default))
-    (setq lsp-ui-sideline-show-code-actions t)
-    (setq lsp-ui-sideline-delay 0.05))
+  (use-package lsp-mode
+      :straight t
+      :defer t
+      :commands (lsp lsp-deferred)  ;; Triggered loading only by those commands
+      :init (setq lsp-keymap-prefix "C-c l"))
+
+    (use-package lsp-ui
+      :straight t
+      :commands lsp-ui-mode
+      :hook
+      ((lsp-mode . bds/cleanup-noexiststent-lsp-folder))
+      :config
+      (setq lsp-ui-doc-enable nil)
+      (setq lsp-ui-header t)
+      (setq lsp-ui-doc-include-signature t)
+      (setq lsp-ui-doc-border (face-foreground 'default))
+      (setq lsp-ui-sideline-show-code-actions t)
+      (setq lsp-ui-sideline-delay 0.05))
 #+end_src
+
+#+RESULTS:
+| bds/cleanup-noexiststent-lsp-folder |
 
 Since by default snippet is enabled, let's also install ~yasnippet~.
 
@@ -303,7 +321,8 @@ The following snippet uses [[https://github.com/mtshiba/pylyzer][pylyzer]] inste
 
 * Rust
 #+begin_src emacs-lisp
-  (use-package rust-mode :straight t :defer t)
+  (use-package rust-mode :straight t :defer t
+    :hook (rust-mode . prettify-symbols-mode))
 #+end_src
 
 * Common Lisp
