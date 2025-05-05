@@ -30,7 +30,7 @@
 ;;;
 ;;; On Samaritan with Ryzen 9 3900X, it reduces the startup time from 2.6
 ;;; seconds to 2.0 seconds.
-(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-threshold (* 100 1000 1000))
 
 ;;; +============================================================+
 ;;; | Basic Utilities for Emacs Configuration                    |
@@ -101,4 +101,4 @@
 
 ;; Now that startup is completed. Descreasing the GC threshold (i.e.
 ;; more frequently GC).
-(setq gc-cons-threshold (* 2 1000 1000))
+(setq gc-cons-threshold (* 20 1000 1000))
