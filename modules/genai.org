@@ -5,10 +5,32 @@
 #+begin_src emacs-lisp
   (use-package gptel
     :straight t
+    :bind (("C-c e" . bds/gptel-prefix-map/body))
     :config
-    (gptel-make-ollama
-     "Ollama"
-     :host "lorian.local:11434"
-     :stream t
-     :models '(qwen3:30b)))
+    (setq gptel-backend
+          (gptel-make-ollama "Ollama"
+            :host "lorian.local:11434"
+            :stream t
+            :models '(qwen3:30b qwen3:32b)))
+    (setq gptel-model 'qwen3:30b))
+
+  (defhydra bds/gptel-prefix-map (:color pink :hint nil)
+    "
+    ^Conetxt^         ^Org^               ^General^
+    ──────────────────────────────────────────────────────────<gptel>────
+    _s_ send          _t_ set topic       _q_ quit
+    _a_ add buffer    _p_ properties      _e_ menu
+    _f_ add file      ^ ^                 _g_ chat
+    _r_ rewrite
+    "
+
+    ("q" nil)
+    ("s" gptel-send :exit t)
+    ("a" gptel-add :exit t)
+    ("f" gptel-add-file :exit t)
+    ("r" gptel-rewrite :exit t)
+    ("t" gptel-org-set-topic :exit t)
+    ("p" gptel-org-set-properties :exit t)
+    ("e" gptel-menu :exit t)
+    ("g" gptel :exit t))
 #+end_src
