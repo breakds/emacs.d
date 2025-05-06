@@ -53,3 +53,41 @@ This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tre
           (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
           (rust "https://github.com/tree-sitter/tree-sitter-rust")))
 #+end_src
+
+* Eglot (LSP)
+
+#+begin_src emacs-lisp
+  (use-package eglot
+    :hook ((python-ts-mode . eglot-ensure)))
+#+end_src
+
+* Corfu (Completion)
+
+Also added ~cape~, because there are many cases when I want to completion with files or dynamic abbreviation expansion across all open buffers.
+
+#+begin_src emacs-lisp
+  (use-package corfu
+    :straight t
+    :init (global-corfu-mode)
+    :custom
+    (corfu-auto t)
+    (corfu-cycle t)
+    :bind (:map corfu-map
+                ("<tab>" . corfu-insert)
+                ("TAB" . corfu-insert)))
+
+  (use-package cape
+    :straight t                             ;; Install CAPE too
+    :after corfu                            ;; ensure Corfu is loaded first
+    :init
+    ;; Add CAPE’s backends to the global list of capfs.
+    ;; Order matters: they’re tried in sequence, so put
+    ;; cape-file and cape-dabbrev early for broad coverage.
+    ;;
+    ;; You can wrap multiple capfs into one super‑backend:
+    ;; (add-to-list 'completion-at-point-functions
+    ;;              (cape-capf-super #'cape-file #'cape-dabbrev))
+    (add-to-list 'completion-at-point-functions #'cape-file)     ;; files & paths
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)  ;; dynamic abbrev
+    (add-to-list 'completion-at-point-functions #'cape-keyword)) ;; language keywords
+#+end_src
