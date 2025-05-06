@@ -67,7 +67,7 @@ This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tre
            (c-ts-mode . eglot-ensure))
     :custom
     '((c-ts-mode . ("clangd" "--background-index"))
-      (c++-ts-mode . ("clangd" "--background-index"))))
+      (c++-ts-mode . ("clangd" "--background-index" "--compile-commands-dir=build"))))
 #+end_src
 
 * Corfu (Completion)
@@ -103,9 +103,22 @@ Also added ~cape~, because there are many cases when I want to completion with f
 
 * C++
 
+Re-map the traditional ~c++-mode~ to the new tree-sitter based ~c++-ts-mode~.
+
 #+begin_src emacs-lisp
   (add-to-list 'major-mode-remap-alist
                '(c++-mode . c++-ts-mode))   ;; use Tree‑sitter C++ mode
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
+#+end_src
+
+Tell ~eglot~ where to find the =compile_commands.json=. It should by default live under the =build= directory. This requires enabling ~CMAKE_EXPORT_COMPILE_COMMANDS~ in the following way.
+
+#+begin_src cmake
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+  if(CMAKE_EXPORT_COMPILE_COMMANDS)
+    set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES 
+      ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+  endif()
 #+end_src
 
 * CMake
