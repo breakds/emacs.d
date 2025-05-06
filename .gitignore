@@ -29,6 +29,9 @@ session.*
 tutorial
 transient
 eshell/
+history
+projects
+eln-cache
 
 *~
 .cache
