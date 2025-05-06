@@ -1,0 +1,49 @@
+* Built-in ~project.el~
+
+#+begin_src emacs-lisp
+  (use-package project
+    :ensure nil
+    :bind (("C-c p" . project-prefix-map/body))
+    :init
+    (setq project-switch-project-action #'project-dired  ;; open Dired at root by default
+          project-find-functions
+          ;; look for projects under ~/projects too
+          (append project-find-functions
+                  '((lambda (_dir) (when (file-directory-p "~/projects")
+                                     (cons 'transient "~/projects")))))))
+
+  (with-eval-after-load 'hydra
+    (defhydra project-prefix-map (:color blue :hint nil)
+      "
+      ^Project^           ^Buffers^                ^Find^                 ^Search^
+      ──────────────────────────────────────────────────────────────────────────
+      _q_ quit            _b_ project buffers      _f_ find file          _s_ search rg
+      _p_ switch project  _k_ kill buffers         _d_ dired root         _r_ replace
+      ^^                  ^^                       ^^                     _R_ replace regexp
+      "
+      ;; Quit
+      ("q" nil)
+
+      ;; Project commands
+      ("p" project-switch-project)
+
+      ;; Buffers (Consult + project.el)
+      ("b" consult-project-buffer                   ; project-only buffers :contentReference[oaicite:7]{index=7}
+       :exit t)
+      ("k" project-kill-buffers                      ; C-x p k :contentReference[oaicite:8]{index=8}
+       :exit t)
+
+      ;; File and directory
+      ("f" project-find-file                         ; C-x p f :contentReference[oaicite:9]{index=9}
+       :exit t)
+      ("d" project-dired                              ; C-x p D :contentReference[oaicite:10]{index=10}
+       :exit t)
+
+      ;; Search & replace
+      ("s" consult-ripgrep                            ; async grep across project :contentReference[oaicite:11]{index=11}
+       :exit t)
+      ("r" project-query-replace                      ; C-x p r :contentReference[oaicite:12]{index=12}
+       :exit t)
+      ("R" project-query-replace-regexp               ; C-x p R :contentReference[oaicite:13]{index=13}
+       :exit t)))
+#+end_src
