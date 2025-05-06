@@ -222,15 +222,16 @@ Run gc upon focus-out. Emacs should feel snappier.
 
 * Scrolling
 
-TODO(breakds): There will be ~pixel-scroll-prcesion-mode~ in Emacs 29. Use it when it comes out.
+#+begin_src emacs-lisp
+  (when (fboundp 'pixel-scroll-prevision-mode)
+    (pixel-scroll-prevision-mode 1))
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
-  (setq scroll-step 1)
-  (defun scroll-up-slightly () (interactive) (scroll-up 3))
-  (defun scroll-down-slightly () (interactive) (scroll-down 3))
-  (global-set-key [mouse-4] 'scroll-down-slightly)
-  (global-set-key [mouse-5] 'scroll-up-slightly)
-#+END_SRC
+By default, Emacs coalesces multiple wheel events into a single line‑scroll event, which conflicts with the fine granularity of precision scrolling. To disable this and ensure each pixel‑scroll event is honored:
+
+#+begin_src emacs-lisp
+  (setq mwheel-coalesce-scroll-events nil)
+#+end_src
 
 * Undo
 
