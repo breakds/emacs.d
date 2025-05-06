@@ -14,10 +14,6 @@ The preset is applied when entering org-mode buffer so that
   (use-package visual-fill-column
     :straight t)
 
-  (defface org-code-bds
-     '((t (:inherit fixed-pitch :foreground "#2aa198" :background "#eee8d5")))
-     "Face for inline code with custom background color.")
-
   (defun bds/org-mode-preset ()
     (org-indent-mode 1)
     (visual-line-mode 1)
@@ -31,7 +27,7 @@ The preset is applied when entering org-mode buffer so that
             ("/" (italic :foreground "Sienna"))
             ("_" (underline :foreground "deep pink"))
             ("=" org-verbatim verbatim)
-            ("~" org-code-bds verbatim)
+            ("~" org-code verbatim)
             ("+" (:strike-through t))))
     (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
