@@ -1,0 +1,155 @@
+#+STARTUP: showall
+
+* Frontend: Vertico
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vertico
+    :straight t
+    :custom
+    (vertico-resize t)
+    (vertico-cycle t)
+    :init (vertico-mode))
+#+END_SRC
+
+Recommended additional configuration from [[https://github.com/minad/vertico][vertico]].
+
+#+BEGIN_SRC emacs-lisp
+  ;; Persist history over Emacs restarts. Vertico sorts by history position.
+  (use-package savehist
+    :straight t
+    :init
+    (savehist-mode))
+
+  ;; Emacs minibuffer configurations.
+  (use-package emacs
+    :custom
+    ;; Support opening new minibuffers from inside existing minibuffers.
+    (enable-recursive-minibuffers t)
+    ;; Hide commands in M-x which do not work in the current mode.  Vertico
+    ;; commands are hidden in normal buffers. This setting is useful beyond
+    ;; Vertico.
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    ;; Do not allow the cursor in the minibuffer prompt
+    (minibuffer-prompt-properties
+     '(read-only t cursor-intangible t face minibuffer-prompt)))
+#+END_SRC
+
+* Backend: Matching & Styles
+
+#+BEGIN_SRC emacs-lisp
+  (use-package orderless
+    :straight t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
+#+END_SRC
+
+
+* Backend: Navigation & Search
+
+** Consult
+
+The Consult package modernizes Emacs completion by providing a suite of
+completing-read‑based commands for efficient navigation and search, such as
+enhanced buffer switching, line search, and asynchronous ~grep~
+
+#+BEGIN_SRC emacs-lisp
+  (use-package consult
+    :straight t
+    :bind (("C-c h" . consult-history)
+  	 ("C-x b" . consult-buffer)
+  	 ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+  	 ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+  	 ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+  	 ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+  	 ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+  	 ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+
+  	 ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+  	 ("M-g g" . consult-goto-line)             ;; orig. goto-line
+
+  	  :map minibuffer-local-map
+  	  ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+  	  ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+    
+    ;; Enable previews in *Completions* buffer
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+    :init
+    ;; Tweak the register preview for `consult-register-load',
+    ;; `consult-register-store' and the built-in commands.  This
+    ;; improves the register formatting, adds thin separator lines,
+    ;; register sorting and hides the window mode line.
+    (advice-add #'register-preview :override #'consult-register-window)
+    (setq register-preview-delay 0.5)
+    ;; Use Consult to select xref locations with preview
+    (setq xref-show-xrefs-function #'consult-xref
+  	xref-show-definitions-function #'consult-xref)
+
+    ;; Configure other variables and modes in the :config section,
+    ;; after lazily loading the package.
+    :config
+    ;; Optionally configure preview. The default value
+    ;; is 'any, such that any key triggers the preview.
+    ;; (setq consult-preview-key 'any)
+    ;; (setq consult-preview-key "M-.")
+    ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+    ;; For some commands and buffer sources it is useful to configure the
+    ;; :preview-key on a per-command basis using the `consult-customize' macro.
+    (consult-customize
+     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-git-grep consult-grep consult-man
+     consult-bookmark consult-recent-file consult-xref
+     consult--source-bookmark consult--source-file-register
+     consult--source-recent-file consult--source-project-recent-file
+     ;; :preview-key "M-."
+     :preview-key '(:debounce 0.4 any)))
+#+END_SRC
+
+** Marginalia
+Marginalia enriches completion candidates with contextual
+~metadata—such~ as documentation strings, file sizes, or variable
+values—right in the minibuffer margin, without altering the candidates
+themselves.
+
+#+begin_src emacs-lisp
+  (use-package marginalia
+    :straight t
+    :after vertico        ;; ensure Vertico (or another frontend) is loaded first
+    :hook (after-init . marginalia-mode)
+    :init
+    ;; Optionally, customize the delay before annotations appear
+    (setq marginalia-annotators
+          '(marginalia-annotators-heavy ; verbose annotations
+            marginalia-annotators-light ; fallback lightweight annotations
+            ))
+    :config
+    ;; Keybinding to cycle annotation style
+    (define-key minibuffer-local-map (kbd "M-A") #'marginalia-cycle))
+#+end_src
+
+** Embark
+*Embark* (“Emacs Mini‑Buffer Actions Rooted in Keymaps”) lets you invoke context‑sensitive actions on the current completion candidate or symbol at point via a single key, effectively acting as a “context menu” in Emacs.
+
+#+begin_src emacs-lisp
+  (use-package embark
+    :straight t
+    :bind
+    (("C-."   . embark-act)        ;; pick an action for the target at point or in minibuffer
+     ("C-,"   . embark-dwim)       ;; do-what-I-mean: choose the most likely action
+     ("C-h B" . embark-bindings))  ;; show available actions and their keybindings
+    :init
+    ;; Do not quit the minibuffer after an action, so you can perform multiple actions
+    (setq embark-quit-after-action nil
+          embark-quit-after-save nil)
+    :config
+    ;; Optionally, add custom actions for specific categories (e.g., files)
+    (add-to-list 'embark-keymap-alist
+                 '(file . embark-file-map)))
+
+  (use-package embark-consult
+    :straight t
+    :after (embark consult)
+    :demand t
+    :hook (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src

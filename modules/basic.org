@@ -68,9 +68,9 @@ The basic map for most frequently used key bindings.
     ^[_q_]: quit
     "
     ("q" nil)
-    ("r" counsel-recentf :exit t)
+    ("r" consult-recent-file :exit t)
     ("t" treemacs :exit t)
-    ("g" counsel-ag :exit t)
+    ("g" consult-ripgrep :exit t)
     ("u" undo-tree-visualize :exit t)
     ("b" bds/revert-buffer-noconfirm :exit t)
     ("x" bds/boxed-text :exit t)

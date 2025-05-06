@@ -99,32 +99,32 @@ Defines the TODO keywords andthe tag list.
 ** Link Image
 
 #+begin_src emacs-lisp
-  (defun bds/org/find-image-in (path caller)
-    (let* ((exts '("png" "jpg" "svg"))
-           (full-exts (append exts (mapcar #'upcase exts)))
-           (regex (concat ".*\\.\\("
-                          (mapconcat 'identity full-exts "\\|")
-                          "\\)$")))
-      (ivy-read "Select Image: "
-                (directory-files-recursively path regex)
-                :require-match t
-                :action (lambda (image-path) (org-insert-link nil image-path nil))
-                :caller caller)))
+  ;; (defun bds/org/find-image-in (path caller)
+  ;;    (let* ((exts '("png" "jpg" "svg"))
+  ;;           (full-exts (append exts (mapcar #'upcase exts)))
+  ;;           (regex (concat ".*\\.\\("
+  ;;                          (mapconcat 'identity full-exts "\\|")
+  ;;                          "\\)$")))
+  ;;      (ivy-read "Select Image: "
+  ;;                (directory-files-recursively path regex)
+  ;;                :require-match t
+  ;;                :action (lambda (image-path) (org-insert-link nil image-path nil))
+  ;;                :caller caller)))
 
-  (defun bds/org/find-picture ()
-    (interactive)
-    (bds/org/find-image-in "/home/breakds/syncthing/workspace/pictures"
-                           'bds/org/find-picture))
+  ;;  (defun bds/org/find-picture ()
+  ;;    (interactive)
+  ;;    (bds/org/find-image-in "/home/breakds/syncthing/workspace/pictures"
+  ;;                           'bds/org/find-picture))
 
-  (defun bds/org/find-screenshot ()
-    (interactive)
-    (bds/org/find-image-in "/home/breakds/syncthing/workspace/screenshots"
-                           'bds/org/find-screenshot))
+  ;;  (defun bds/org/find-screenshot ()
+  ;;    (interactive)
+  ;;    (bds/org/find-image-in "/home/breakds/syncthing/workspace/screenshots"
+  ;;                           'bds/org/find-screenshot))
 
-  (defun bds/org/find-drawing ()
-    (interactive)
-    (bds/org/find-image-in "/home/breakds/syncthing/workspace/drawing"
-                           'bds/org/find-drawing))
+  ;;  (defun bds/org/find-drawing ()
+  ;;    (interactive)
+  ;;    (bds/org/find-image-in "/home/breakds/syncthing/workspace/drawing"
+  ;;                           'bds/org/find-drawing))
 #+end_src
 
 ** Key Bindings
@@ -267,11 +267,11 @@ Save org buffers after a refile.
 We want to opt to use ivy for refile destination completion. After experiment this suits my current org structure really well.
 
 #+begin_src emacs-lisp
-  (with-eval-after-load 'org
-    (add-to-list 'ivy-completing-read-handlers-alist
-                 '(org-capture-refile . completing-read-default))
-    (add-to-list 'ivy-completing-read-handlers-alist
-                 '(org-refile . completing-read-default)))
+  ;; (with-eval-after-load 'org
+  ;;   (add-to-list 'ivy-completing-read-handlers-alist
+  ;;                '(org-capture-refile . completing-read-default))
+  ;;   (add-to-list 'ivy-completing-read-handlers-alist
+  ;;                '(org-refile . completing-read-default)))
 #+end_src
 
 * Markdown
