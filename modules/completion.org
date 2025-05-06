@@ -6,6 +6,7 @@
   (use-package vertico
     :straight t
     :custom
+    (vertico-count 20)
     (vertico-resize t)
     (vertico-cycle t)
     :init (vertico-mode))

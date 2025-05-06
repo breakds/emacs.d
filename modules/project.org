@@ -18,8 +18,8 @@
       ^Project^           ^Buffers^                ^Find^                 ^Search^
       ──────────────────────────────────────────────────────────────────────────
       _q_ quit            _b_ project buffers      _f_ find file          _s_ search rg
-      _p_ switch project  _k_ kill buffers         _d_ dired root         _r_ replace
-      ^^                  ^^                       ^^                     _R_ replace regexp
+      _p_ switch project  _k_ kill buffers         _d_ dired root         _r_ replace regexp
+      ^^                  ^^                       ^^
       "
       ;; Quit
       ("q" nil)
@@ -28,22 +28,19 @@
       ("p" project-switch-project)
 
       ;; Buffers (Consult + project.el)
-      ("b" consult-project-buffer                   ; project-only buffers :contentReference[oaicite:7]{index=7}
+      ("b" consult-project-buffer                   ; project-only buffers
        :exit t)
-      ("k" project-kill-buffers                      ; C-x p k :contentReference[oaicite:8]{index=8}
+      ("k" project-kill-buffers                      ; C-x p k
        :exit t)
 
       ;; File and directory
-      ("f" project-find-file                         ; C-x p f :contentReference[oaicite:9]{index=9}
+      ("f" project-find-file                         ; C-x p f
        :exit t)
-      ("d" project-dired                              ; C-x p D :contentReference[oaicite:10]{index=10}
+      ("d" project-dired                              ; C-x p D
        :exit t)
-
       ;; Search & replace
-      ("s" consult-ripgrep                            ; async grep across project :contentReference[oaicite:11]{index=11}
+      ("s" consult-ripgrep                            ; async grep across project
        :exit t)
-      ("r" project-query-replace                      ; C-x p r :contentReference[oaicite:12]{index=12}
-       :exit t)
-      ("R" project-query-replace-regexp               ; C-x p R :contentReference[oaicite:13]{index=13}
+      ("r" project-query-replace-regexp               ; C-x p r
        :exit t)))
 #+end_src
