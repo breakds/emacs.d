@@ -53,6 +53,7 @@ The basic map for most frequently used key bindings.
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
+  (recentf-mode 1)
   (defhydra hydra-base-map (:color amaranth)
     "
     Break's Frequently Used Keys
@@ -63,7 +64,6 @@ The basic map for most frequently used key bindings.
     _g_ ag              _t_ treemacs
     _b_ revert buffer
     _x_ boxed text
-    _a_ aider
     ─────────────────────────────────────
     ^[_q_]: quit
     "
@@ -73,8 +73,7 @@ The basic map for most frequently used key bindings.
     ("g" consult-ripgrep :exit t)
     ("u" undo-tree-visualize :exit t)
     ("b" bds/revert-buffer-noconfirm :exit t)
-    ("x" bds/boxed-text :exit t)
-    ("a" aider-transient-menu :exit t))
+    ("x" bds/boxed-text :exit t))
 #+END_SRC
 
 Being able to zoom in and out is useful
@@ -190,9 +189,7 @@ Choose one of the browsers, with the priority in order.
   (setq browse-url-generic-program
         (or (locate-file "google-chrome" exec-path)
             (locate-file "google-chrome-stable" exec-path)
-            (locate-file "firefox" exec-path)
-            (locate-file "vivaldi" exec-path)            
-            ))
+            (locate-file "firefox" exec-path)))
   (setq browse-url-browser-function 'browse-url-generic)
 #+END_SRC
 
@@ -221,12 +218,6 @@ Run gc upon focus-out. Emacs should feel snappier.
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'focus-out-hook #'garbage-collect)
-#+END_SRC
-
-* Electric Buffer
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x C-b") 'electric-buffer-list)
 #+END_SRC
 
 * Scrolling
