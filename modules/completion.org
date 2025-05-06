@@ -67,12 +67,17 @@ enhanced buffer switching, line search, and asynchronous ~grep~
   	 ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
 
   	 ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-  	 ("M-g g" . consult-goto-line)             ;; orig. goto-line
+  	 ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
 
-  	  :map minibuffer-local-map
-  	  ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-  	  ("M-r" . consult-history))                ;; orig. previous-matching-history-element
-    
+           ("C-s" . consult-line)
+           ("M-s k" . consult-keep-lines)
+           ("M-s u" . consult-focus-lines)
+           ("M-g o" . consult-outline)
+
+  	 :map minibuffer-local-map
+  	 ("M-s" . consult-history)                ;; orig. next-matching-history-element
+  	 ("M-r" . consult-history))               ;; orig. previous-matching-history-element
+
     ;; Enable previews in *Completions* buffer
     :hook (completion-list-mode . consult-preview-at-point-mode)
     :init
@@ -129,7 +134,7 @@ themselves.
 #+end_src
 
 ** Embark
-*Embark* (“Emacs Mini‑Buffer Actions Rooted in Keymaps”) lets you invoke context‑sensitive actions on the current completion candidate or symbol at point via a single key, effectively acting as a “context menu” in Emacs.
+*Embark* (“Emacs Mini‑Buffer Actions Rooted in Keymaps”) lets you invoke context‑sensitive actions on the current _completion candidate_ or symbol at point via a single key, effectively acting as a “context menu” in Emacs.
 
 #+begin_src emacs-lisp
   (use-package embark
