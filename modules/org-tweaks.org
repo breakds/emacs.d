@@ -145,20 +145,30 @@ Defines the TODO keywords andthe tag list.
 Use =<F6>= to paste a link in the kill ring (i.e. paste bin). By default it will just use ="here"= as the title for the link, unless we put more logic in =bds/org/deduce-link-text=.
 
 #+BEGIN_SRC emacs-lisp
-  (defun bds/org/deduce-link-text (link)
-      ;; TODO(breakds): Implement the actual logic here
-      "here")
+  (defun bds/org/deduce-link-text (link callback)
+    (let ((prompt (format "/nothink Please summarize this url into a very short title with no more than 3 words: \n%s"
+                          link)))
+      (gptel-request prompt
+        :callback (apply-partially (lambda (callback response info)
+                                     (if (not response)
+                                         (progn (message "Failed to deduce the link title")
+                                                (funcall callback "here"))
+                                       (funcall callback response)))
+                                   callback))))
+
   (defun bds/org/yank-link ()
     (interactive)
-    (let* ((link (current-kill 0))  ;; Get the front of the kill ring
-           (text (bds/org/deduce-link-text link)))
-      (insert "[[")
-      (yank)
-      (insert "][")
-      (insert text)
-      (insert "]]")))
-  (define-key org-mode-map (kbd "<f6>") 'bds/org/yank-link)
+    (let* ((link (current-kill 0)))  ;; Get the front of the kill ring
+      (bds/org/deduce-link-text
+       link
+       (apply-partially
+        (lambda (link text)
+          (insert (format "[[%s][%s]]" link text)))
+        link))))
 #+END_SRC
+
+#+RESULTS:
+: bds/org/yank-link
 
 #+begin_src emacs-lisp
   (defhydra bds/org/hydra-extra (:color amaranth)
@@ -376,4 +386,3 @@ already done.
       ;;   (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
       ;;   (org-reveal-title-slide nil))
     #+end_src
-

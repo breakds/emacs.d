@@ -1,3 +1,9 @@
+:PROPERTIES:
+:GPTEL_MODEL: qwen3:30b
+:GPTEL_BACKEND: Ollama
+:GPTEL_SYSTEM: You are a large language model living in Emacs and a helpful assistant. Respond concisely.
+:GPTEL_BOUNDS: nil
+:END:
 #+STARTUP: showall
 
 * GPTEL
@@ -5,7 +11,11 @@
 #+begin_src emacs-lisp
   (use-package gptel
     :straight t
-    :bind (("C-c e" . bds/gptel-prefix-map/body))
+    :commands (bds/org/yank-link)
+    :bind (("C-c e" . bds/gptel-prefix-map/body)
+           :map org-mode-map
+           ("<f6>" . bds/org/yank-link))
+    :hook (org-mode . (require 'gptel))
     :config
     (setq gptel-backend
           (gptel-make-ollama "Ollama"
