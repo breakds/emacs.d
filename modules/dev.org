@@ -58,7 +58,12 @@ This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tre
 
 #+begin_src emacs-lisp
   (use-package eglot
-    :hook ((python-ts-mode . eglot-ensure)))
+    :hook ((python-ts-mode . eglot-ensure)
+           (c++-ts-mode . eglot-ensure)
+           (c-ts-mode . eglot-ensure))
+    :custom
+    '((c-ts-mode . ("clangd" "--background-index"))
+      (c++-ts-mode . ("clangd" "--background-index"))))
 #+end_src
 
 * Corfu (Completion)
@@ -90,4 +95,34 @@ Also added ~cape~, because there are many cases when I want to completion with f
     (add-to-list 'completion-at-point-functions #'cape-file)     ;; files & paths
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)  ;; dynamic abbrev
     (add-to-list 'completion-at-point-functions #'cape-keyword)) ;; language keywords
+#+end_src
+
+* C++
+
+#+begin_src emacs-lisp
+  (add-to-list 'major-mode-remap-alist
+               '(c++-mode . c++-ts-mode))   ;; use Tree‑sitter C++ mode
+#+end_src
+
+* CMake
+
+#+begin_src emacs-lisp
+  (use-package cmake-mode
+    :straight t
+    :defer t
+    :config (setq cmake-tab-width 4))
+#+end_src
+
+* Nix
+
+#+begin_src emacs-lisp
+  (use-package nix-mode :straight t :defer t)
+#+end_src
+
+
+* Python
+
+#+begin_src emacs-lisp
+  (add-to-list 'major-mode-remap-alist
+               '(python-mode . python-ts-mode))
 #+end_src
