@@ -1,0 +1,14 @@
+#+STARTUP: showall
+
+* GPTEL
+
+#+begin_src emacs-lisp
+  (use-package gptel
+    :straight t
+    :config
+    (gptel-make-ollama
+     "Ollama"
+     :host "lorian.local:11434"
+     :stream t
+     :models '(qwen3:30b)))
+#+end_src

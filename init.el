@@ -98,7 +98,7 @@
 (bds-load-config-module "modules" "project.org")
 (bds-load-config-module "modules" "org-tweaks.org")
 (bds-load-config-module "modules" "dev.org")
-;; (bds-load-config-module "modules" "development.org")
+(bds-load-config-module "modules" "genai.org")
 (garbage-collect)
 
 ;; Now that startup is completed. Descreasing the GC threshold (i.e.
