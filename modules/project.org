@@ -3,14 +3,7 @@
 #+begin_src emacs-lisp
   (use-package project
     :ensure nil
-    :bind (("C-c p" . project-prefix-map/body))
-    :init
-    (setq project-switch-project-action #'project-dired  ;; open Dired at root by default
-          project-find-functions
-          ;; look for projects under ~/projects too
-          (append project-find-functions
-                  '((lambda (_dir) (when (file-directory-p "~/projects")
-                                     (cons 'transient "~/projects")))))))
+    :bind (("C-c p" . project-prefix-map/body)))
 
   (with-eval-after-load 'hydra
     (defhydra project-prefix-map (:color blue :hint nil)

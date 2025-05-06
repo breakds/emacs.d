@@ -1,0 +1,42 @@
+#+STARTUP: showall
+
+* Git
+
+Use magit for git. The customization on =magit-display-buffer-function= makes it prompts =magit-status= in the same windows instead of opening a new one.
+
+#+begin_src emacs-lisp
+  (use-package magit
+    ;; Defer loading magit until magit-status is called
+    :commands magit-status
+    :straight t
+    :defer t
+    :bind (("C-x g" . magit-status))
+    :custom (magit-display-buffer-function
+             #'magit-display-buffer-same-window-except-diff-v1))
+#+end_src
+
+* Forge
+
+This package [[https://magit.vc/manual/forge/][forge]] adds integration with Github and Gitlab etc.
+
+*NOTE*: Make sure to configure a GitHub token before using this package!
+
+1. https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
+2. https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+
+#+begin_src emacs-lisp
+  (use-package forge
+    :straight t
+    :defer t
+    :after magit)
+#+end_src
+
+* Direnv
+
+This makes Emacs respect =.envrc= file for direnv. I am mainly using =direnv= for automatically starting the =devShell= defined in =flake.nix=, and this makes it so that it brings in the commands enabled by the =devShell=.
+
+#+begin_src emacs-lisp
+  (use-package direnv
+    :straight t
+    :config (direnv-mode))
+#+end_src
