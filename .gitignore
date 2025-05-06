@@ -47,3 +47,6 @@ projectile-bookmarks.eld
 
 # Forge and Magit
 forge-database.sqlite
+
+# Tree Sitter
+tree-sitter

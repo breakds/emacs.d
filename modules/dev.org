@@ -40,3 +40,16 @@ This makes Emacs respect =.envrc= file for direnv. I am mainly using =direnv= fo
     :straight t
     :config (direnv-mode))
 #+end_src
+
+
+* Tree-sitter
+
+This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tree‑sitter major mode, Emacs needs the compiled grammar .so (or .dylib/.dll). To install a grammar, run ~M-x treesit-install-language-grammar~. The available grammar urls are defined below.
+
+#+begin_src emacs-lisp
+  (setq treesit-language-source-alist
+        '((python "https://github.com/tree-sitter/tree-sitter-python")
+          (c "https://github.com/tree-sitter/tree-sitter-c")
+          (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+          (rust "https://github.com/tree-sitter/tree-sitter-rust")))
+#+end_src

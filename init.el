@@ -99,6 +99,7 @@
 (bds-load-config-module "modules" "project.org")
 (bds-load-config-module "modules" "org-tweaks.org")
 (bds-load-config-module "modules" "dev.org")
+(bds-load-config-module "modules" "python.org")
 ;; (bds-load-config-module "modules" "development.org")
 (garbage-collect)
 

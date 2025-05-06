@@ -1,0 +1,8 @@
+#+STARTUP: showall
+
+* Syntax Parsing: ~tree-sitter~
+
+#+begin_src emacs-lisp
+  (add-to-list 'major-mode-remap-alist
+               '(python-mode . python-ts-mode))
+#+end_src
