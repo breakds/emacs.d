@@ -1,3 +1,9 @@
+:PROPERTIES:
+:GPTEL_MODEL: qwen3:30b
+:GPTEL_BACKEND: Ollama
+:GPTEL_SYSTEM: You are a large language model living in Emacs and a helpful assistant. Respond concisely.
+:GPTEL_BOUNDS: nil
+:END:
 #+TITLE: Org Tweaks
 #+AUTHOR: Break Yang
 #+STARTUP: showall
@@ -145,10 +151,18 @@ Defines the TODO keywords andthe tag list.
 Use =<F6>= to paste a link in the kill ring (i.e. paste bin). By default it will just use ="here"= as the title for the link, unless we put more logic in =bds/org/deduce-link-text=.
 
 #+BEGIN_SRC emacs-lisp
+  (defvar ollama-octavian
+    (gptel-make-ollama "octavian"
+      :host "octavian.local:11434"
+      :stream t
+      :models '(granite3.3:2b gemma3:1b)))
+
+
   (defun bds/org/deduce-link-text (link callback)
-    (let ((prompt (format "/nothink Please summarize this url into a very short title with no more than 3 words: \n%s"
-                          link)))
-      (gptel-request prompt
+    (let ((gptel-backend ollama-octavian)
+          (gptel-model 'gemma3:1b))
+      (gptel-request link
+        :system "Please summarize this url into a short title no more than 3 words. Do not include quotes or double quotes."
         :callback (apply-partially (lambda (callback response info)
                                      (if (not response)
                                          (progn (message "Failed to deduce the link title")
@@ -163,7 +177,8 @@ Use =<F6>= to paste a link in the kill ring (i.e. paste bin). By default it will
        link
        (apply-partially
         (lambda (link text)
-          (insert (format "[[%s][%s]]" link text)))
+          (insert (format "[[%s][%s]]"
+                          link (string-trim text "[\"']+" "[\"']+"))))
         link))))
 #+END_SRC
 
