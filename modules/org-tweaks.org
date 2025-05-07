@@ -391,13 +391,3 @@ already done.
       (org-tree-slide-header t)
       (org-tree-slide-breadcrumbs " // "))
   #+end_src
-
-** Reveal.js (not working)
-
-    #+begin_src emacs-lisp
-      ;; (use-package ox-reveal
-      ;;   :straight t
-      ;;   :custom
-      ;;   (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-      ;;   (org-reveal-title-slide nil))
-    #+end_src
