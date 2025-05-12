@@ -1,3 +1,9 @@
+:PROPERTIES:
+:GPTEL_MODEL: qwen3:30b
+:GPTEL_BACKEND: Ollama
+:GPTEL_SYSTEM: You are a large language model living in Emacs and a helpful assistant. Respond concisely.
+:GPTEL_BOUNDS: nil
+:END:
 #+STARTUP: showall
 
 * Frontend: Vertico
@@ -119,6 +125,9 @@ enhanced buffer switching, line search, and asynchronous ~grep~
      consult--source-recent-file consult--source-project-recent-file
      ;; :preview-key "M-."
      :preview-key '(:debounce 0.4 any)))
+
+  ;; So that I can use `M-q` to replace in embark-become
+  (define-key minibuffer-local-map (kbd "M-q") 'query-replace)
 #+END_SRC
 
 ** Marginalia
