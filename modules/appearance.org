@@ -1,3 +1,9 @@
+:PROPERTIES:
+:GPTEL_MODEL: qwen3:30b
+:GPTEL_BACKEND: Ollama
+:GPTEL_SYSTEM: You are a large language model living in Emacs and a helpful assistant. Respond concisely.
+:GPTEL_BOUNDS: nil
+:END:
 #+TITLE: Configure the Appearance of Emacs
 #+STARTUP: showall
 
@@ -16,13 +22,13 @@ Use [[https://github.com/domtronn/all-the-icons.el/][all-the-icons]] for all the
 
 Use solarized light as the theme for.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp  
   (use-package doom-themes
     :straight t
     :config
     ;; Global Settings
     (setq doom-themes-enable-bold t
-  	doom-themes-enable-italic t)
+    	doom-themes-enable-italic t)
     (load-theme 'doom-monokai-pro t)
     (doom-themes-visual-bell-config)
     ;; Neotree
@@ -34,6 +40,18 @@ Use solarized light as the theme for.
     (doom-themes-treemacs-config)
     ;; Org Mode
     (doom-themes-org-config))
+
+  ;; Customization of the loaded theme
+  ;;
+  ;; Note that you can use `M-x list-faces-display` to see all the faces that are
+  ;; active. You can then use `M-x describe-face RET eglot-inlay-hint-face` to
+  ;; check the face that interests you
+  (with-eval-after-load 'eglot
+    (set-face-attribute 'eglot-inlay-hint-face nil
+                        :foreground "#ffcce5"
+                        :background nil
+                        :slant 'italic
+                        :height 0.8))
 #+END_SRC
 
 Enable [[https://github.com/seagle0128/doom-modeline][doom-modeline]]. It is a nicely done minimalist's modeline. It

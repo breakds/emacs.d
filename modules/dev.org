@@ -1,3 +1,9 @@
+:PROPERTIES:
+:GPTEL_MODEL: qwen3:30b
+:GPTEL_BACKEND: Ollama
+:GPTEL_SYSTEM: You are a large language model living in Emacs and a helpful assistant. Respond concisely.
+:GPTEL_BOUNDS: nil
+:END:
 #+STARTUP: showall
 
 * Git
