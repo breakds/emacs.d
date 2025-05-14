@@ -117,7 +117,11 @@ enhanced buffer switching, line search, and asynchronous ~grep~
     ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
     ;; For some commands and buffer sources it is useful to configure the
     ;; :preview-key on a per-command basis using the `consult-customize' macro.
+
+    ;; So that I can use `M-q` to replace with embark-become
+    (defvar-keymap my-consult-line-map "M-q" "C-. B M-%")
     (consult-customize
+     consult-line :keymap my-consult-line-map
      consult-theme :preview-key '(:debounce 0.2 any)
      consult-ripgrep consult-git-grep consult-grep consult-man
      consult-bookmark consult-recent-file consult-xref
@@ -125,9 +129,6 @@ enhanced buffer switching, line search, and asynchronous ~grep~
      consult--source-recent-file consult--source-project-recent-file
      ;; :preview-key "M-."
      :preview-key '(:debounce 0.4 any)))
-
-  ;; So that I can use `M-q` to replace in embark-become
-  (define-key minibuffer-local-map (kbd "M-q") 'query-replace)
 #+END_SRC
 
 ** Marginalia
