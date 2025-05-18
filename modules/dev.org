@@ -73,9 +73,11 @@ This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tre
   (use-package eglot
     :hook ((python-ts-mode . eglot-ensure)
            (c++-ts-mode . eglot-ensure)
-           (c-ts-mode . eglot-ensure))
+           (c-ts-mode . eglot-ensure)
+           (rust-ts-mode . eglot-ensure))
     :custom
-    '((c-ts-mode . ("clangd" "--background-index"))
+    '((rust-ts-mode . ("rust-analyzer"))
+      (c-ts-mode . ("clangd" "--background-index"))
       (c++-ts-mode . ("clangd" "--background-index" "--compile-commands-dir=build"))))
 #+end_src
 
