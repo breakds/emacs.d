@@ -127,6 +127,24 @@ Tell ~eglot~ where to find the =compile_commands.json=. It should by default liv
   endif()
 #+end_src
 
+Add key-bindings to proactively call =clang-format=.
+
+#+begin_src emacs-lisp
+  (defun bds/clang-format-buffer-and-back-to-indentation ()
+    "Call clang-format to format the whole buffer, and move the
+     cursor to the first non-space character of the current line."
+    (interactive)
+    (clang-format-buffer)
+    (back-to-indentation))
+
+  (use-package clang-format
+    :straight t
+    :after c++-ts-mode
+    :bind (:map c++-ts-mode-map
+                ("<tab>" . clang-format-region)
+                ("<C-M-tab>" . bds/clang-format-buffer-and-back-to-indentation)))
+#+end_src
+
 * CMake
 
 #+begin_src emacs-lisp
