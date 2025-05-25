@@ -317,6 +317,17 @@ determined (or specified).
   (org-babel-do-load-languages 'org-babel-load-languages '((dot . t)))
 #+end_src
 
+** Support Nix
+#+begin_src emacs-lisp
+  (use-package ob-nix
+    :straight t
+    :after org
+    :config
+    (org-babel-do-load-languages 'org-babel-load-languages '((nix . t)))
+    (add-to-list 'org-src-lang-modes '("nix" . nix-ts))
+    (setq org-src-fontify-natively t))
+#+end_src
+
 * Org Capture
 
 org-captured item by default goes to =buffers.org=.
