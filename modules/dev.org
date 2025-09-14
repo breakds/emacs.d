@@ -78,7 +78,8 @@ This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tre
     :hook ((python-ts-mode . eglot-ensure)
            (c++-ts-mode . eglot-ensure)
            (c-ts-mode . eglot-ensure)
-           (rust-ts-mode . eglot-ensure))
+           (rust-ts-mode . eglot-ensure)
+           (gfm-mode . eglot-ensure))
     :custom
     '((rust-ts-mode . ("rust-analyzer"))
       (c-ts-mode . ("clangd" "--background-index"))
@@ -238,3 +239,24 @@ Associating ~.ts~ and ~.tsx~ with typescript ts mode.
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 #+end_src
+
+* Markdown
+
+We do need a better major mode for markdown
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :straight t
+    :defer t
+    :init (setq markdown-command "pandoc")
+    :mode (("\\.md\\'" . gfm-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :hook ((gfm-mode . flyspell-mode)
+           (gfm-mode . outline-minor-mode)))
+
+  (with-eval-after-load 'markdown-mode
+    (setq markdown-fontify-code-blocks-natively t)
+    (setq markdown-code-lang-modes
+          '(("python" . python-ts)
+            ("c++" . c++-ts))))
+#+End_src
