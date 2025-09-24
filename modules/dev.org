@@ -262,4 +262,13 @@ We do need a better major mode for markdown
             ("json" . json-ts)
             ("nix" . nix-ts)
             ("c++" . c++-ts))))
+
+  (with-eval-after-load 'gfm-mode
+    (setq markdown-fontify-code-blocks-natively t)
+    (setq markdown-code-lang-modes
+          '(("python" . python-ts)
+            ("py" . python-ts)
+            ("json" . json-ts)
+            ("nix" . nix-ts)
+            ("c++" . c++-ts))))  
 #+End_src
