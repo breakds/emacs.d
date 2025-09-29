@@ -230,7 +230,7 @@ JavaScript should enjoy its tree-sitter mode.
 
 #+begin_src emacs-lisp
   (add-to-list 'major-mode-remap-alist
-               '(javascript-mode . javascript-ts-mode))
+               '(js-mode . js-ts-mode))
 #+end_src
 
 Associating ~.ts~ and ~.tsx~ with typescript ts mode.
