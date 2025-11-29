@@ -53,22 +53,24 @@ This makes Emacs respect =.envrc= file for direnv. I am mainly using =direnv= fo
 This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tree‑sitter major mode, Emacs needs the compiled grammar .so (or .dylib/.dll). To install a grammar, run ~M-x treesit-install-language-grammar~. The available grammar urls are defined below.
 
 #+begin_src emacs-lisp
-  (setq treesit-language-source-alist
-        '((python "https://github.com/tree-sitter/tree-sitter-python")
-          (c "https://github.com/tree-sitter/tree-sitter-c")
-          (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-          ;; Need the v0.23.3 because newer version will have ABI 15,
-          ;; while currently the `treesit` in emacs requires the ABI 14
-          ;; version.
-          (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3")
-          (json   "https://github.com/tree-sitter/tree-sitter-json")
-          (yaml   "https://github.com/ikatyang/tree-sitter-yaml")
-          (nix    "https://github.com/nix-community/tree-sitter-nix")
-          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master"
-"typescript/src")
-          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-          (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
-          (cmake  "https://github.com/uyha/tree-sitter-cmake")))
+    (setq treesit-language-source-alist
+          '((python "https://github.com/tree-sitter/tree-sitter-python")
+            (c "https://github.com/tree-sitter/tree-sitter-c")
+            (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+            ;; Need the v0.23.3 because newer version will have ABI 15,
+            ;; while currently the `treesit` in emacs requires the ABI 14
+            ;; version.
+            (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.23.3")
+            (json   "https://github.com/tree-sitter/tree-sitter-json")
+            (yaml   "https://github.com/ikatyang/tree-sitter-yaml")
+            (nix    "https://github.com/nix-community/tree-sitter-nix")
+            (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master"
+  "typescript/src")
+            (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+            (css "https://github.com/tree-sitter/tree-sitter-css")
+            (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
+            (svelte "https://github.com/tree-sitter-grammars/tree-sitter-svelte.git")
+            (cmake  "https://github.com/uyha/tree-sitter-cmake")))
 #+end_src
 
 * Eglot (LSP)
@@ -79,7 +81,11 @@ This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tre
            (c++-ts-mode . eglot-ensure)
            (c-ts-mode . eglot-ensure)
            (rust-ts-mode . eglot-ensure)
-           (gfm-mode . eglot-ensure))
+           (gfm-mode . eglot-ensure)
+           (svelte-ts-mode . eglot-ensure))
+    :config
+    (add-to-list 'eglot-server-programs
+                 '(svelte-ts-mode . ("svelteserver" "--stdio")))
     :custom
     '((rust-ts-mode . ("rust-analyzer"))
       (c-ts-mode . ("clangd" "--background-index"))
@@ -238,6 +244,14 @@ Associating ~.ts~ and ~.tsx~ with typescript ts mode.
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+#+end_src
+
+* Svelte
+
+#+begin_src emacs-lisp
+  (use-package svelte-ts-mode
+    :straight (svelte-ts-mode :type git :host github :repo "leafOfTree/svelte-ts-mode")
+    :mode ("\\.svelte\\'" . svelte-ts-mode))
 #+end_src
 
 * Markdown
