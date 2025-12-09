@@ -67,6 +67,7 @@ This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tre
             (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master"
   "typescript/src")
             (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+            (html "https://github.com/tree-sitter/tree-sitter-html")
             (css "https://github.com/tree-sitter/tree-sitter-css")
             (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
             (svelte "https://github.com/tree-sitter-grammars/tree-sitter-svelte.git")
@@ -249,9 +250,128 @@ Associating ~.ts~ and ~.tsx~ with typescript ts mode.
 * Svelte
 
 #+begin_src emacs-lisp
-  (use-package svelte-ts-mode
-    :straight (svelte-ts-mode :type git :host github :repo "leafOfTree/svelte-ts-mode")
-    :mode ("\\.svelte\\'" . svelte-ts-mode))
+  ;; 1. FORCE LOAD DEPENDENCIES
+  (require 'typescript-ts-mode)
+  (require 'js)
+  (require 'css-mode) ;; defines css-ts-mode, and in your Emacs, css--treesit-settings
+
+  ;; 2. HELPER: Detect implicit JS
+  (defun svelte-ts-mode--is-implicit-js (node)
+    "Return non-nil if SCRIPT_ELEMENT NODE has no lang= attribute."
+    (let ((has-lang nil)
+          (child (treesit-node-child node 0)))
+      (while child
+        (when (equal (treesit-node-type child) "attribute")
+          (let ((name-node (treesit-node-child-by-field-name child "name")))
+            (when (and name-node
+                       (equal (treesit-node-text name-node t) "lang"))
+              (setq has-lang t))))
+        (setq child (treesit-node-next-sibling child)))
+      (not has-lang)))
+
+  ;; 3. DEFINE THE MODE
+  (define-derived-mode svelte-ts-mode prog-mode "Svelte"
+    "Major mode for Svelte files. Inherits rules dynamically from TS/JS/CSS."
+    :group 'svelte
+
+    (when (treesit-ready-p 'svelte)
+      ;; Create the primary parser for Svelte itself
+      (setq-local treesit-primary-parser (treesit-parser-create 'svelte))
+
+      ;; --- RANGES (The "Islands") ---
+      (setq-local treesit-range-settings
+                  (treesit-range-rules
+                   :embed 'typescript
+                   :host 'svelte
+                   '((script_element
+                      (start_tag (attribute (attribute_name) @n (:equal @n "lang")
+                                            (quoted_attribute_value
+                                             (attribute_value) @v (:match "ts\\|typescript" @v))))
+                      (raw_text) @capture))
+
+                   :embed 'javascript
+                   :host 'svelte
+                   `((script_element
+                      (start_tag) @start
+                      (raw_text) @capture
+                      (:pred svelte-ts-mode--is-implicit-js @start)))
+
+                   :embed 'javascript
+                   :host 'svelte
+                   '((script_element
+                      (start_tag (attribute (attribute_name) @n (:equal @n "lang")
+                                            (quoted_attribute_value
+                                             (attribute_value) @v (:match "js\\|javascript" @v))))
+                      (raw_text) @capture))
+
+                   :embed 'css
+                   :host 'svelte
+                   '((style_element (raw_text) @capture))))
+
+      ;; Precompute upstream settings safely
+      (let* ((ts-rules (when (fboundp 'typescript-ts-mode--font-lock-settings)
+                         ;; Emacs 29/30: this returns a list of treesit font-lock rules
+                         (typescript-ts-mode--font-lock-settings 'typescript)))
+             (js-rules (when (boundp 'js--treesit-font-lock-settings)
+                         js--treesit-font-lock-settings))
+             ;; If your Emacs actually defines css-ts-mode--settings instead,
+             ;; swap css--treesit-settings for css-ts-mode--settings here.
+             (css-rules (when (boundp 'css--treesit-settings)
+                          css--treesit-settings)))
+
+        ;; --- FONT LOCK (The "Paint") ---
+        (setq-local treesit-font-lock-settings
+                    (append
+                     ;; A. Svelte HTML Rules
+                     (treesit-font-lock-rules
+                      :language 'svelte
+                      :feature 'comment
+                      '((comment) @font-lock-comment-face)
+
+                      :language 'svelte
+                      :feature 'delimiter
+                      '((["<" ">" "</" "/>" "{" "}"])
+                        @font-lock-bracket-face)
+
+                      :language 'svelte
+                      :feature 'keyword
+                      '((["if" "else" "each" "await" "key"
+                          "const" "html" "debug"]
+                         @font-lock-keyword-face)
+                        (["#"] @font-lock-preprocessor-face))
+
+                      :language 'svelte
+                      :feature 'attribute
+                      '((attribute (attribute_name)
+                                   @font-lock-attribute-name-face))
+
+                      :language 'svelte
+                      :feature 'string
+                      '((quoted_attribute_value) @font-lock-string-face)
+
+                      :language 'svelte
+                      :feature 'tag
+                      '((tag_name) @font-lock-function-name-face))
+
+                     ;; B. Inherit TypeScript Rules (if available)
+                     ts-rules
+
+                     ;; C. Inherit JavaScript Rules
+                     js-rules
+
+                     ;; D. Inherit CSS Rules
+                     css-rules)))
+
+      ;; --- FEATURES ---
+      (setq-local treesit-font-lock-feature-list
+                  '((comment delimiter keyword definition type)
+                    (tag attribute string constant property selector)
+                    (function-name variable-name)
+                    (bracket error)))
+
+      (treesit-major-mode-setup)))
+
+  (add-to-list 'auto-mode-alist '("\\.svelte\\'" . svelte-ts-mode))
 #+end_src
 
 * Markdown
