@@ -1,3 +1,9 @@
+:PROPERTIES:
+:GPTEL_MODEL: qwen3:30b
+:GPTEL_BACKEND: Ollama
+:GPTEL_SYSTEM: You are a large language model living in Emacs and a helpful assistant. Respond concisely.
+:GPTEL_BOUNDS: nil
+:END:
 #+TITLE: Basic Configurations for Emacs
 #+STARTUP: showall
 
@@ -248,4 +254,29 @@ navigate/jump between them.
     ;; I think it is probably better to handle long term change history
     ;; with git manually.
     (setq undo-tree-auto-save-history nil))
+#+end_src
+
+* Special Treatment for Emacs Daemon
+
+*Problem*: with ~emacs --daemon~ + ~waypipe~, closing the window may only delete the frame, but keep the underlying terminal/display connection alive.
+
+*Result*: ~waypipe~ keeps running (it still has an open Wayland connection).
+  
+*Fix*: if this FRAME is the last one on its terminal, kill that terminal. This closes the display connection cleanly, letting waypipe exit, while the daemon keeps running for fast reconnects.
+
+#+begin_src emacs-lisp
+  (require 'seq)
+
+  (defun breakds/waypipe-kill-terminal-if-last-frame (frame)
+    "When closing the last frame on a terminal (e.g. via WM close),
+  kill the terminal so the display connection (waypipe) can exit."
+    (let* ((term (frame-terminal frame))
+           (same-term-frames
+            (seq-filter (lambda (f) (eq (frame-terminal f) term))
+                        (frame-list))))
+      (when (and (daemonp) (= (length same-term-frames) 1))
+        (with-selected-frame frame
+          (save-buffers-kill-terminal)))))
+
+  (add-hook 'delete-frame-functions #'breakds/waypipe-kill-terminal-if-last-frame)
 #+end_src
