@@ -65,29 +65,34 @@ requires the icon package [[https://github.com/domtronn/all-the-icons.el/][all-t
 
 * Graphical Window Specific such as X
 
-#+BEGIN_SRC emacs-lisp
-  (when window-system
-    (scroll-bar-mode -1)
-    (tool-bar-mode -1)
-    (tooltip-mode -1))
-#+END_SRC
-
-* Font
-
 The =:height= property basically specifies the size of the font. It is
 an integer in units of =1/10= point.
 
-#+BEGIN_SRC emacs-lisp
-  (let ((hostname (system-name)))
-    (set-face-attribute 'default nil
-                        :font "JetBrainsMonoNL NFP Light"
-                        :height (cond ((or (string-equal hostname "brock")
-                                           (string-equal hostname "blocker")
-                                           (string-equal hostname "hand"))
-                                       100)
-                                      ((getenv "WAYLAND_DISPLAY") 120)
-                                      (t 100))))
-#+END_SRC
+#+begin_src emacs-lisp
+  (defun bds/apply-appearance-to-frame (frame)
+    "Apply GUI-related appearance settings to a frame"
+    (with-selected-frame frame
+      (when (display-graphic-p frame)
+        (modify-frame-parameters frame '((vertical-scroll-bars . nil)))
+        (tool-bar-mode -1)
+        (tooltip-mode -1)
+
+        ;; ---------- Font ----------
+        (let ((hostname (system-name)))
+          (set-face-attribute 'default frame
+                              :font "JetBrainsMonoNL NFP Light"
+                              :height (cond ((member hostname '("brock" "blocker" "hand")) 100)
+                                            ((eq window-system 'pgtk) 120)
+                                            (t 100))))
+
+        (require 'all-the-icons nil t)
+        (require 'nerd-icons nil t))))
+
+  (add-hook 'after-make-frame-functions #'bds/apply-appearance-to-frame)
+  (unless (daemonp)
+    ;; Non-daemon: apply to the initial frame
+    (bds/apply-appearance-to-frame (selected-frame)))
+#+end_src
 
 * Time
 
