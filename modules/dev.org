@@ -245,6 +245,7 @@ Associating ~.ts~ and ~.tsx~ with typescript ts mode.
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+  (setq typescript-ts-mode-indent-offset 4)
 #+end_src
 
 * Svelte
