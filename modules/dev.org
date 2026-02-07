@@ -71,7 +71,8 @@ This uses the built-in ~tree-sitter~, called ~treesit~. Before you can use a Tre
             (css "https://github.com/tree-sitter/tree-sitter-css")
             (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
             (svelte "https://github.com/tree-sitter-grammars/tree-sitter-svelte.git")
-            (cmake  "https://github.com/uyha/tree-sitter-cmake")))
+            (cmake  "https://github.com/uyha/tree-sitter-cmake")
+            (kdl    "https://github.com/tree-sitter-grammars/tree-sitter-kdl")))
 #+end_src
 
 * Eglot (LSP)
@@ -219,6 +220,73 @@ Use ~auctex~ for =LaTeX= edit.
 
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
+#+end_src
+
+* KDL
+
+[[https://kdl.dev/][KDL]] is a document language with xml-like semantics that looks like you're invoking a bunch of CLI commands. It is used as a configuration language by tools such as [[https://github.com/kdl-org/kdl][zellij]] and [[https://github.com/nushell/nushell][nushell]].
+
+There is no built-in treesit mode for KDL, so we define one here.
+
+#+begin_src emacs-lisp
+  (define-derived-mode kdl-ts-mode prog-mode "KDL"
+    "Major mode for KDL files, powered by tree-sitter."
+    :group 'kdl
+
+    (when (treesit-ready-p 'kdl)
+      (setq-local treesit-primary-parser (treesit-parser-create 'kdl))
+
+      (setq-local treesit-font-lock-settings
+                  (treesit-font-lock-rules
+                   :language 'kdl
+                   :feature 'comment
+                   '([(single_line_comment) (multi_line_comment)] @font-lock-comment-face
+                     (node (node_comment)) @font-lock-comment-face
+                     (node (node_field (node_field_comment))) @font-lock-comment-face
+                     (node_children (node_children_comment)) @font-lock-comment-face)
+
+                   :language 'kdl
+                   :feature 'string
+                   '((string) @font-lock-string-face
+                     (escape) @font-lock-escape-face)
+
+                   :language 'kdl
+                   :feature 'type
+                   '((node (identifier) @font-lock-function-name-face)
+                     (type) @font-lock-type-face
+                     (annotation_type) @font-lock-type-face)
+
+                   :language 'kdl
+                   :feature 'property
+                   '((prop (identifier) @font-lock-property-name-face))
+
+                   :language 'kdl
+                   :feature 'constant
+                   '((boolean) @font-lock-constant-face
+                     ((keyword) @font-lock-constant-face
+                      (:match "null" @font-lock-constant-face)))
+
+                   :language 'kdl
+                   :feature 'number
+                   '((number) @font-lock-number-face)
+
+                   :language 'kdl
+                   :feature 'delimiter
+                   '((["=" "+" "-"] @font-lock-operator-face)
+                     (["{" "}" "(" ")"] @font-lock-bracket-face)
+                     ([";"] @font-lock-delimiter-face))))
+
+      (setq-local treesit-font-lock-feature-list
+                  '((comment string)
+                    (type property constant number)
+                    (delimiter)))
+
+      (setq-local comment-start "// ")
+      (setq-local comment-end "")
+
+      (treesit-major-mode-setup)))
+
+  (add-to-list 'auto-mode-alist '("\\.kdl\\'" . kdl-ts-mode))
 #+end_src
 
 * XML
