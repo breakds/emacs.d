@@ -82,7 +82,7 @@ an integer in units of =1/10= point.
           (set-face-attribute 'default frame
                               :font "JetBrainsMonoNL NFP Light"
                               :height (cond ((member hostname '("brock" "blocker" "hand")) 100)
-                                            ((eq window-system 'pgtk) 120)
+                                            ((eq window-system 'pgtk) 110)
                                             (t 100))))
 
         (require 'all-the-icons nil t)
